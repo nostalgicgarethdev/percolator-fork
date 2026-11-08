@@ -1,0 +1,18 @@
+PERC public source snapshot
+
+Commit: 666c4fa72aae30555b12b9451b33637e19baf636
+Tree: 5940a9af97a16cd6f39b863ebb0ac67e5b31acf9
+Source files: 942
+This archive has no Git history and no dependency installs.
+
+Build the website from web/:
+  npm install
+  npm run dev
+The dev server listens on http://127.0.0.1:43123 and proxies /api/engine to http://127.0.0.1:43124.
+
+Build the local engine session from the repository root:
+  cargo run -p fork-engine
+
+Licenses are Apache-2.0. engine/LICENSE and program/LICENSE are the upstream license files.
+SHA256SUMS lists every source file in this snapshot, not this manifest.
+The published GitHub README adds the public repository URL. Its SHA256SUMS line matches that published README. Every other listed file is unchanged from the snapshot.

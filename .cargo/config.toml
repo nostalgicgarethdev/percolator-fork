@@ -1,0 +1,5 @@
+# Matches the upstream engine stack requirement and gives the local session
+# the same headroom. This file is original to Percolator Fork; engine/.cargo
+# remains the upstream copy.
+[env]
+RUST_MIN_STACK = "16777216"

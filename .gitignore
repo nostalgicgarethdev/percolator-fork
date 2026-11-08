@@ -1,0 +1,14 @@
+target
+agent-tools/
+program/.claude/
+**/*.rs.bk
+web/node_modules
+web/.next
+web/out
+web/tsconfig.tsbuildinfo
+.DS_Store
+*.log
+.env
+.env.local
+/data
+perc-brand-reference.jpg

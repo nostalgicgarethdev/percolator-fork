@@ -1,0 +1,314 @@
+//! Adversarial matcher for end-to-end testing of the wrapper's validate_matcher_return on BOTH the
+//! batch CPI (tag 3, via set_return_data) and the single TradeCpi (tag 0, via the ctx-account return
+//! region). It returns CRAFTED returns; the attack "mode" is read from ctx_account.data[0] (set by the
+//! test). The wrapper MUST reject every hostile mode and accept only the honest one.
+#![allow(unexpected_cfgs)]
+use solana_program::{
+    account_info::AccountInfo,
+    entrypoint,
+    entrypoint::ProgramResult,
+    instruction::{AccountMeta, Instruction},
+    program::{invoke, set_return_data},
+    program_error::ProgramError,
+    pubkey::Pubkey,
+    system_instruction, system_program,
+};
+
+entrypoint!(process);
+
+const ABI: u32 = 3;
+const FLAG_VALID: u32 = 1;
+const FLAG_PARTIAL_OK: u32 = 2;
+const CONTROL_OWNER_OFFSET: usize = 66;
+const CONTROL_STATE_OFFSET: usize = CONTROL_OWNER_OFFSET + 32;
+const CONTROL_MIN_LEN: usize = CONTROL_STATE_OFFSET + 1;
+
+fn require_control_owner(
+    program_id: &Pubkey,
+    owner: &AccountInfo,
+    ctx: &AccountInfo,
+) -> ProgramResult {
+    if !owner.is_signer
+        || !ctx.is_writable
+        || ctx.owner != program_id
+        || ctx.data_len() < CONTROL_MIN_LEN
+    {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    let data = ctx.try_borrow_data()?;
+    if data[CONTROL_STATE_OFFSET] != 1
+        || data[CONTROL_OWNER_OFFSET..CONTROL_STATE_OFFSET] != owner.key.as_ref()[..]
+    {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    drop(data);
+    Ok(())
+}
+
+fn process_control_init(program_id: &Pubkey, accounts: &[AccountInfo]) -> ProgramResult {
+    let owner = accounts.first().ok_or(ProgramError::NotEnoughAccountKeys)?;
+    let ctx = accounts.get(1).ok_or(ProgramError::NotEnoughAccountKeys)?;
+    if !owner.is_signer
+        || !ctx.is_writable
+        || ctx.owner != program_id
+        || ctx.data_len() < CONTROL_MIN_LEN
+    {
+        return Err(ProgramError::InvalidAccountData);
+    }
+    let mut data = ctx.try_borrow_mut_data()?;
+    if data[CONTROL_STATE_OFFSET] != 0 {
+        return Err(ProgramError::AccountAlreadyInitialized);
+    }
+    data[64] = 9;
+    data[65] = 0;
+    data[CONTROL_OWNER_OFFSET..CONTROL_STATE_OFFSET].copy_from_slice(owner.key.as_ref());
+    data[CONTROL_STATE_OFFSET] = 1;
+    Ok(())
+}
+
+fn process_control_configure(
+    program_id: &Pubkey,
+    accounts: &[AccountInfo],
+    data: &[u8],
+) -> ProgramResult {
+    if data.len() != 3 {
+        return Err(ProgramError::InvalidInstructionData);
+    }
+    let owner = accounts.first().ok_or(ProgramError::NotEnoughAccountKeys)?;
+    let ctx = accounts.get(1).ok_or(ProgramError::NotEnoughAccountKeys)?;
+    require_control_owner(program_id, owner, ctx)?;
+    let mut ctx_data = ctx.try_borrow_mut_data()?;
+    ctx_data[64] = data[1];
+    ctx_data[65] = data[2];
+    Ok(())
+}
+
+fn process_control_close(program_id: &Pubkey, accounts: &[AccountInfo]) -> ProgramResult {
+    let owner = accounts.first().ok_or(ProgramError::NotEnoughAccountKeys)?;
+    let ctx = accounts.get(1).ok_or(ProgramError::NotEnoughAccountKeys)?;
+    require_control_owner(program_id, owner, ctx)?;
+    let recipient = accounts.get(2).ok_or(ProgramError::NotEnoughAccountKeys)?;
+    if !recipient.is_writable || recipient.key == ctx.key {
+        return Err(ProgramError::InvalidAccountData);
+    }
+
+    let ctx_lamports = ctx.lamports();
+    let recipient_lamports = recipient
+        .lamports()
+        .checked_add(ctx_lamports)
+        .ok_or(ProgramError::ArithmeticOverflow)?;
+    **recipient.try_borrow_mut_lamports()? = recipient_lamports;
+    **ctx.try_borrow_mut_lamports()? = 0;
+    ctx.realloc(0, false)?;
+    ctx.assign(&system_program::ID);
+    Ok(())
+}
+
+// Build one crafted 64-byte MatcherReturn; `mode` perturbs exactly one field (default = honest fill).
+fn craft(
+    mode: u8,
+    ratio_numerator: u8,
+    req_id: u64,
+    lp: u64,
+    asset: u64,
+    oracle: u64,
+    req: i128,
+) -> [u8; 64] {
+    let mut flags = FLAG_VALID;
+    let mut price = oracle;
+    let mut size = req;
+    let mut a = asset;
+    let mut o = oracle;
+    let mut rid = req_id;
+    let mut l = lp;
+    match mode {
+        0 => size = req.saturating_mul(2), // over-fill: open 2x the requested position
+        1 => size = req.checked_neg().unwrap_or(0), // reversed direction
+        2 => a = asset.wrapping_add(1),    // forged asset echo
+        3 => o = oracle.wrapping_add(1),   // forged oracle echo
+        4 => rid = req_id.wrapping_add(1), // forged req_id
+        5 => l = lp.wrapping_add(1),       // forged lp_account_id
+        6 => price = 0,                    // zero exec price
+        7 => {
+            flags = FLAG_VALID;
+            size = req / 2
+        } // unflagged partial (no PARTIAL_OK)
+        15 => {
+            flags = FLAG_VALID | FLAG_PARTIAL_OK;
+            size = req / 2
+        } // matcher-authorized partial
+        19 => {
+            flags = FLAG_VALID | FLAG_PARTIAL_OK;
+            let numerator = u128::from(ratio_numerator.clamp(1, 254));
+            let magnitude = req.unsigned_abs();
+            let partial = (magnitude / 255) * numerator + ((magnitude % 255) * numerator) / 255;
+            size = if req.is_negative() {
+                -(partial as i128)
+            } else {
+                partial as i128
+            };
+        } // matcher-selected partial numerator over 255
+        _ => {}                            // honest full fill -> wrapper accepts
+    }
+    let mut b = [0u8; 64];
+    b[0..4].copy_from_slice(&ABI.to_le_bytes());
+    b[4..8].copy_from_slice(&flags.to_le_bytes());
+    b[8..16].copy_from_slice(&price.to_le_bytes());
+    b[16..32].copy_from_slice(&size.to_le_bytes());
+    b[32..40].copy_from_slice(&rid.to_le_bytes());
+    b[40..48].copy_from_slice(&l.to_le_bytes());
+    b[48..56].copy_from_slice(&o.to_le_bytes());
+    b[56..64].copy_from_slice(&a.to_le_bytes());
+    b
+}
+
+fn mode_for_call(accounts: &[AccountInfo]) -> Result<(u8, bool, u8), ProgramError> {
+    let mut d = accounts[1].try_borrow_mut_data()?;
+    let mode = if d.len() > 64 && d[64] != 0 {
+        d[64]
+    } else {
+        d[0]
+    };
+    if mode == 13 {
+        if d.len() <= 65 {
+            return Err(ProgramError::InvalidAccountData);
+        }
+        if d[65] == 0 {
+            d[65] = 1;
+            return Ok((9, false, 0));
+        }
+        return Ok((13, true, 0));
+    }
+    let ratio_numerator = d.get(65).copied().unwrap_or(0);
+    Ok((mode, false, ratio_numerator))
+}
+
+fn maybe_drain_tail_signer(mode: u8, accounts: &[AccountInfo]) -> ProgramResult {
+    if mode != 14 {
+        return Ok(());
+    }
+    if accounts.len() < 4 {
+        return Err(ProgramError::NotEnoughAccountKeys);
+    }
+    let ix = system_instruction::transfer(accounts[2].key, accounts[3].key, 1_000_000);
+    if accounts.len() >= 5 {
+        invoke(
+            &ix,
+            &[
+                accounts[2].clone(),
+                accounts[3].clone(),
+                accounts[4].clone(),
+            ],
+        )
+    } else {
+        invoke(&ix, &[accounts[2].clone(), accounts[3].clone()])
+    }
+}
+
+fn invoke_nested_return_writer(accounts: &[AccountInfo]) -> ProgramResult {
+    if accounts.len() < 4 {
+        return Err(ProgramError::NotEnoughAccountKeys);
+    }
+    // Invoke this fixture under a second program id. Its response is unrelated to the outer
+    // request; the test only needs a distinct program to become the latest return-data producer.
+    let mut data = vec![0u8; 44];
+    data[0] = 3;
+    data[1] = 1;
+    let ix = Instruction {
+        program_id: *accounts[2].key,
+        accounts: vec![
+            AccountMeta::new_readonly(*accounts[0].key, false),
+            AccountMeta::new(*accounts[3].key, false),
+        ],
+        data,
+    };
+    invoke(
+        &ix,
+        &[
+            accounts[0].clone(),
+            accounts[3].clone(),
+            accounts[2].clone(),
+        ],
+    )
+}
+
+fn process(program_id: &Pubkey, accounts: &[AccountInfo], data: &[u8]) -> ProgramResult {
+    match data.first() {
+        // Tag 0: single matcher call (67 bytes); write the crafted return into ctx[0..64].
+        Some(&0) => {
+            if data.len() < 67 {
+                return Err(ProgramError::InvalidInstructionData);
+            }
+            let req_id = u64::from_le_bytes(data[1..9].try_into().unwrap());
+            let asset = u16::from_le_bytes(data[9..11].try_into().unwrap()) as u64;
+            let lp = u64::from_le_bytes(data[11..19].try_into().unwrap());
+            let oracle = u64::from_le_bytes(data[19..27].try_into().unwrap());
+            let req = i128::from_le_bytes(data[27..43].try_into().unwrap());
+            let (mode, no_write, ratio_numerator) = mode_for_call(accounts)?;
+            if no_write {
+                return Ok(());
+            }
+            maybe_drain_tail_signer(mode, accounts)?;
+            let rec = craft(mode, ratio_numerator, req_id, lp, asset, oracle, req);
+            let mut d = accounts[1].try_borrow_mut_data()?;
+            d[0..64].copy_from_slice(&rec);
+            Ok(())
+        }
+        // Tag 3: batched matcher call (18 + n*26 bytes); emit n returns via set_return_data.
+        Some(&3) => {
+            let n = data[1] as usize;
+            if n == 0 || n > 16 || data.len() != 18 + n * 26 {
+                return Err(ProgramError::InvalidInstructionData);
+            }
+            let req_id = u64::from_le_bytes(data[2..10].try_into().unwrap());
+            let lp = u64::from_le_bytes(data[10..18].try_into().unwrap());
+            let (mode, no_write, ratio_numerator) = mode_for_call(accounts)?;
+            if no_write {
+                return Ok(());
+            }
+            maybe_drain_tail_signer(mode, accounts)?;
+            if mode == 17 {
+                invoke_nested_return_writer(accounts)?;
+            }
+            let mut out = [0u8; 16 * 64];
+            let emit = if mode == 8 { n.saturating_sub(1) } else { n }; // mode 8 = short return length
+            for i in 0..n {
+                let base = 18 + i * 26;
+                let asset = u16::from_le_bytes(data[base..base + 2].try_into().unwrap()) as u64;
+                let oracle = u64::from_le_bytes(data[base + 2..base + 10].try_into().unwrap());
+                let req = i128::from_le_bytes(data[base + 10..base + 26].try_into().unwrap());
+                // Mode 16 models a hostile strategy matcher that fills the first leg in full but
+                // cuts every later leg in half. Each return is locally valid; the wrapper must
+                // preserve the batch-level quantity relationship.
+                let leg_mode = if mode == 16 {
+                    if i == 0 {
+                        9
+                    } else {
+                        15
+                    }
+                } else {
+                    mode
+                };
+                out[i * 64..i * 64 + 64].copy_from_slice(&craft(
+                    leg_mode,
+                    ratio_numerator,
+                    req_id,
+                    lp,
+                    asset,
+                    oracle,
+                    req,
+                ));
+            }
+            set_return_data(&out[..emit * 64]);
+            if mode == 18 {
+                invoke_nested_return_writer(accounts)?;
+            }
+            Ok(())
+        }
+        // Test-only public lifecycle for same-pubkey context ABA coverage.
+        Some(&10) if data.len() == 1 => process_control_init(program_id, accounts),
+        Some(&11) => process_control_configure(program_id, accounts, data),
+        Some(&12) if data.len() == 1 => process_control_close(program_id, accounts),
+        _ => Err(ProgramError::InvalidInstructionData),
+    }
+}

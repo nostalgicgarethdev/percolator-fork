@@ -1,0 +1,30 @@
+Percolator Fork
+Copyright 2026 Percolator Fork contributors
+
+This project is an independent derivative. It is not endorsed by Anatoly
+Yakovenko, Solana Labs, or the operators of percolator.trade.
+
+The risk engine in engine/ is the Apache-2.0 work published at
+https://github.com/aeyakovenko/percolator
+revision 4db11a8cb0053815e23a35d3a7d3edc265d8d866
+(commit message: "fix(v16): retain last claimant receipts until backing expires",
+2026-09-17). See engine/LICENSE.
+
+The Solana wrapper in program/ is the Apache-2.0 work published at
+https://github.com/aeyakovenko/percolator-prog
+revision 5cb331dde354517c6371a8acf92cecb194f3bb73
+(commit message: "docs: record stale route matrix invariant evidence",
+2026-09-22). See program/LICENSE. That program already pinned the engine
+revision above. program/Cargo.toml is the only upstream file edited: the git
+dependency was repointed at ../engine. No Rust source in program/ was edited.
+
+percolator-cli was not imported. Its LICENSE file is titled Apache License 2.0
+but section 8 does not match the Apache-2.0 text, and GitHub records SPDX
+NOASSERTION.
+
+https://percolator.trade is a separate Next.js product. Its frontend, brand
+assets, and copy were not copied. At the time of this import the site served a
+waitlist for most routes.
+
+Original code in crates/, web/, scripts/, and these documents is Apache-2.0.
+See LICENSE.
