@@ -15,7 +15,7 @@ export default function SourcesPage() {
       <header className="border-b border-border px-4 py-8 sm:px-8">
         <p className="text-[10px] font-medium tracking-[0.2em] text-muted-foreground uppercase">Sources</p>
         <h1 className="mt-2 max-w-[36rem] font-serif text-[clamp(1.8rem,4vw,2.6rem)] leading-tight italic">
-          Public upstream. Private interface.
+          Public upstream. Published desk.
         </h1>
         <p className="mt-4 max-w-[44rem] text-[15px] leading-relaxed text-muted-foreground">
           The engine and the Solana wrapper are Anatoly Yakovenko&apos;s Apache-2.0 code. Upstream
@@ -37,11 +37,26 @@ export default function SourcesPage() {
           pin={PROGRAM}
           className="border-t border-border md:border-t-0 md:border-l"
         />
+        <SourceCard
+          label="This website"
+          href="https://github.com/nostalgicgarethdev/percolator-fork"
+          name="nostalgicgarethdev/percolator-fork"
+          pin="snapshot 666c4fa72aae30555b12b9451b33637e19baf636"
+          className="border-t border-border md:col-span-2"
+        />
       </div>
       <section className="space-y-4 px-4 py-8 text-[15px] leading-relaxed text-muted-foreground sm:px-8">
         <p>
-          This website&apos;s own source is private. It is not published as open source from this
-          page, and a private link is not offered here.
+          This website&apos;s source is published at{" "}
+          <a
+            href="https://github.com/nostalgicgarethdev/percolator-fork"
+            className="text-primary underline-offset-2 hover:underline"
+          >
+            github.com/nostalgicgarethdev/percolator-fork
+          </a>
+          . <span className="font-mono text-[12px]">MANIFEST.txt</span> records sanitized snapshot{" "}
+          <span className="font-mono text-[12px]">666c4fa72aae30555b12b9451b33637e19baf636</span>.
+          That snapshot id is not this repository&apos;s Git commit hash.
         </p>
         <p>
           What was checked: a 16-step local lifecycle on the vendored engine. Deposit, open,
