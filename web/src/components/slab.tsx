@@ -77,7 +77,6 @@ export function Slab() {
   const applied = clamp(attempt, anchor - CAP, anchor + CAP);
   const blocked = attempt !== applied;
   const book = useMemo(() => settle(applied, lots, asset.insurance), [applied, lots, asset.insurance]);
-  const paidRatio = book.win === 0 ? 0 : book.paid / book.win;
   const flat = book.win === 0;
   const status = blocked
     ? "One crank. Six points."
@@ -205,55 +204,39 @@ export function Slab() {
       </div>
 
       <p className="mt-1 text-center font-serif text-[1.85rem] leading-none tracking-[-0.03em] italic">{status}</p>
-      {flat ? (
-        <div className="mt-4 space-y-2 text-center text-[15px] leading-relaxed text-muted-foreground">
-          <p>The violet band is six points.</p>
-          <p>Long and short each start with {atoms(CAPITAL)}.</p>
+      <p className="mt-3 text-center text-[15px] text-muted-foreground">
+        {blocked ? `Book holds at ${applied.toFixed(0)}.` : flat ? "Same mark. Four assets." : `From ${ENTRY}.`}
+      </p>
+
+      {flat ? null : (
+        <div className="mx-auto mt-10 grid max-w-xl grid-cols-2">
+          <Side
+            name="Long"
+            align="right"
+            winning={book.longWins}
+            paid={book.paid}
+            cut={book.cut}
+            loss={book.shortWins ? book.fromLoser : 0}
+          />
+          <Side
+            name="Short"
+            align="left"
+            winning={book.shortWins}
+            paid={book.paid}
+            cut={book.cut}
+            loss={book.longWins ? book.fromLoser : 0}
+          />
         </div>
-      ) : (
-        <>
-          <p className="mt-3 text-center text-[13px] text-muted-foreground">
-            {blocked ? `Holding ${applied.toFixed(0)}` : `From ${ENTRY}`}
-          </p>
-          <div className="mx-auto mt-5 h-[2px] w-44 bg-white/10">
-            <div className="flex h-full">
-              <div className="h-full bg-[#14F195]" style={{ width: `${paidRatio * 100}%` }} />
-              <div className="h-full bg-[#9945FF]" style={{ width: `${(1 - paidRatio) * 100}%` }} />
-            </div>
-          </div>
-          <p className="mt-3 text-center text-[13px]">
-            <span className={book.paid > 0 ? "text-[#14F195]" : "text-muted-foreground"}>paid {atoms(book.paid)}</span>
-            <span className="px-2 text-white/25">·</span>
-            <span className={book.cut > 0 ? "text-[#9945FF]" : "text-muted-foreground"}>cut {atoms(book.cut)}</span>
-          </p>
-          <div className="mx-auto mt-14 grid max-w-md grid-cols-2">
-            <Side
-              name="Long"
-              align="right"
-              winning={book.longWins}
-              paid={book.paid}
-              cut={book.cut}
-              loss={book.shortWins ? book.fromLoser : 0}
-            />
-            <Side
-              name="Short"
-              align="left"
-              winning={book.shortWins}
-              paid={book.paid}
-              cut={book.cut}
-              loss={book.longWins ? book.fromLoser : 0}
-            />
-          </div>
-        </>
       )}
 
-      <div className="mx-auto mt-16 max-w-md" role="listbox" aria-label="Assets in the account">
-        <p className="pb-3 text-[13px] text-muted-foreground">Insurance stays with the asset.</p>
+      <div className="mx-auto mt-12 max-w-xl" role="listbox" aria-label="Assets in the account">
+        <p className="pb-2 text-[15px] text-muted-foreground">Insurance does not cross.</p>
         {ASSETS.map((item) => {
           const on = item.id === assetId;
           const row = settle(applied, lots, item.insurance);
-          const note = row.win === 0 ? "no move" : row.cut === 0 ? "pays" : `cut ${atoms(row.cut)}`;
+          const note = row.win === 0 ? `${atoms(item.insurance)} cover` : row.cut === 0 ? "pays" : `cut ${atoms(row.cut)}`;
           const noteClass = row.win === 0 ? "text-muted-foreground" : row.cut === 0 ? "text-[#14F195]" : "text-[#9945FF]";
+          const paidPct = row.win === 0 ? 0 : (row.paid / row.win) * 100;
           return (
             <button
               key={item.id}
@@ -261,16 +244,27 @@ export function Slab() {
               role="option"
               aria-selected={on}
               onClick={() => setAssetId(item.id)}
-              className={`grid h-12 w-full grid-cols-[5.5rem_1fr_auto] items-center border-t border-white/10 text-left focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none ${
+              className={`w-full border-t border-white/10 py-4 text-left focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none ${
                 on ? "text-foreground" : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <span className="flex items-center gap-2.5 text-[15px]">
-                <span className={`size-1.5 rounded-full ${on ? "bg-[#14F195]" : "bg-white/15"}`} aria-hidden />
-                {item.label}
+              <span className="flex items-baseline justify-between gap-4">
+                <span className="flex items-center gap-2.5 text-[15px]">
+                  <span className={`size-1.5 rounded-full ${on ? "bg-[#14F195]" : "bg-white/20"}`} aria-hidden />
+                  {item.label}
+                </span>
+                <span className={`text-[14px] tabular-nums ${noteClass}`}>{note}</span>
               </span>
-              <span className="text-[14px] tabular-nums">{atoms(item.insurance)}</span>
-              <span className={`text-[14px] tabular-nums ${noteClass}`}>{note}</span>
+              <span className="mt-3 flex h-2.5 w-full bg-white/10">
+                {row.win === 0 ? (
+                  <span className="h-full bg-white/25" style={{ width: `${(item.insurance / 100_000) * 100}%` }} />
+                ) : (
+                  <>
+                    <span className="h-full bg-[#14F195]" style={{ width: `${paidPct}%` }} />
+                    <span className="h-full bg-[#9945FF]" style={{ width: `${100 - paidPct}%` }} />
+                  </>
+                )}
+              </span>
             </button>
           );
         })}
