@@ -1,5 +1,43 @@
 import Link from "next/link";
 
+const IDEA = [
+  {
+    title: "One market lives in one account",
+    body: "A market is a single slab account that can hold many assets. A trade reads that trader's portfolio. It does not walk every account in the market, so the cost stays bounded as the asset list grows.",
+  },
+  {
+    title: "Deposits come before profit",
+    body: "A deposit is senior capital. Profit is junior. The engine lets that profit be used only when the same asset domain can show backing or insurance for it. The book is shaped so it does not pay out more than it holds.",
+  },
+  {
+    title: "A new asset can be opened for a fee",
+    body: "Inside a market, anyone can add an asset when the creation fee is above zero, and that fee funds the base asset's insurance. A fee of zero means only the market authority can add one. Each asset keeps its own insurance and its own backing.",
+  },
+  {
+    title: "The engine decides. It does not hold the money.",
+    body: "The library allows or rejects the state change. A wrapper would move tokens, check an oracle, and call a matcher. The program treats that matcher as untrusted, apart from the rules a liquidity provider chose, and it still checks the result. He published both under Apache-2.0, with a Kani proof suite on the engine. The proofs are bounded. They do not clear a live market.",
+  },
+];
+
+const BUILT = [
+  {
+    title: "A desk you can read",
+    body: "Overview, how it works, sources, and a terminal. On this host the terminal stays blank. There is no price, no deposit, and no trade.",
+  },
+  {
+    title: "His engine, run locally",
+    body: "A session on your own machine calls the unmodified v16 engine in memory. We stepped deposit, open, funding, settlement, close, withdraw, rejected calls, and one liquidation. Sixteen steps, on example numbers. Nothing is sent to a chain.",
+  },
+  {
+    title: "The chain program is pinned, not deployed",
+    body: "The Solana wrapper is his Apache-2.0 code, pointed at that local engine. It is not deployed. This site has no program address and no token address.",
+  },
+  {
+    title: "What is still off",
+    body: "No oracle, no matcher, and no keeper. The public site will not attach the engine for you. The same steps can be run from the published source, on 127.0.0.1, still with example numbers.",
+  },
+];
+
 const STEPS = [
   {
     n: "01",
@@ -41,6 +79,14 @@ export function Home() {
             <Link href="/how-it-works" className="glass-pill font-medium">
               How it works
             </Link>
+            <a
+              href="https://x.com/percolatorv2"
+              target="_blank"
+              rel="noreferrer"
+              className="glass-pill font-medium"
+            >
+              @percolatorv2
+            </a>
           </div>
         </div>
         <div className="glass hidden aspect-square place-items-center rounded-[36px] lg:grid" aria-hidden="true">
@@ -50,6 +96,49 @@ export function Home() {
             <path d="M28 100H172" stroke="white" strokeWidth="1.8" />
           </svg>
         </div>
+      </section>
+
+      <section className="mt-12" aria-labelledby="idea-title">
+        <p className="text-[13px] text-muted-foreground">From the published design</p>
+        <h2 id="idea-title" className="mt-3 max-w-3xl text-[clamp(2rem,4vw,3.2rem)] leading-[0.95] font-semibold tracking-[-0.05em]">
+          What Percolator is
+        </h2>
+        <p className="mt-4 max-w-3xl text-[17px] leading-relaxed text-muted-foreground">
+          Anatoly Yakovenko published Percolator as research: a risk engine for perpetual futures,
+          and a Solana program that would host it. His own notes call the work educational,
+          unaudited, and not for real funds. The notes below are a reading of those repositories.
+          They are not a product announcement from him, and this desk is not endorsed by him.
+        </p>
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          {IDEA.map((item) => (
+            <article key={item.title} className="glass rounded-[28px] px-6 py-6">
+              <h3 className="text-[18px] font-medium tracking-[-0.03em]">{item.title}</h3>
+              <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">{item.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-4" aria-labelledby="built-title">
+        <p className="text-[13px] text-muted-foreground">This desk</p>
+        <h2 id="built-title" className="mt-3 max-w-3xl text-[clamp(2rem,4vw,3.2rem)] leading-[0.95] font-semibold tracking-[-0.05em]">
+          What is built
+        </h2>
+        <p className="mt-4 max-w-3xl text-[17px] leading-relaxed text-muted-foreground">
+          PERC is an independent interface on top of that pinned code. The website and the local
+          session are ours. The engine is his, unmodified.
+        </p>
+        <ol className="mt-6 grid gap-4">
+          {BUILT.map((item, index) => (
+            <li key={item.title} className="glass grid gap-3 rounded-[28px] px-6 py-5 sm:grid-cols-[4.5rem_minmax(0,1fr)]">
+              <p className="font-mono text-[13px] text-muted-foreground">{String(index + 1).padStart(2, "0")}</p>
+              <div>
+                <h3 className="text-[18px] font-medium tracking-[-0.03em]">{item.title}</h3>
+                <p className="mt-2 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">{item.body}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
       </section>
 
       <ol className="mt-12 grid gap-4 md:grid-cols-3">

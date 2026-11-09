@@ -4,6 +4,8 @@ A read-only perpetuals desk on Percolator.
 
 Live site: [percolator.beer](https://www.percolator.beer)
 
+X: [@percolatorv2](https://x.com/percolatorv2)
+
 PERC is an independent interface. The website and the local session are original. The risk engine and the Solana wrapper are Anatoly Yakovenko's Apache-2.0 code, pinned in [UPSTREAM.md](UPSTREAM.md). This is not an official Percolator product, and it is not endorsed by Anatoly Yakovenko, Solana Labs, or the operators of percolator.trade. Upstream's warning stands: the engine is educational, unaudited, and not for production or real funds.
 
 A perpetual is a contract for a long or a short on a price, with no expiry. The public host does not attach an engine, take deposits, or place trades. A matcher and a keeper are not running.

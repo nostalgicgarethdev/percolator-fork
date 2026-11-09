@@ -48,6 +48,14 @@ export function Shell({ children }: { children: React.ReactNode }) {
               );
             })}
           </nav>
+          <a
+            href="https://x.com/percolatorv2"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+          >
+            @percolatorv2
+          </a>
           <span className="hidden rounded-full bg-white/8 px-3 py-1.5 text-[12px] text-muted-foreground sm:inline">
             Read-only
           </span>
