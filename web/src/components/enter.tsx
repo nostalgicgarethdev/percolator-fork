@@ -33,41 +33,40 @@ export function Enter({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div inert={open ? true : undefined}>{children}</div>
+      <div className="enter-hold">{children}</div>
       {open ? (
         <div
-          className="enter-screen fixed inset-0 z-50 flex items-center justify-center px-6 touch-none"
+          className="enter-screen fixed inset-0 z-50 bg-[#07060b] p-3 sm:p-4"
           role="dialog"
           aria-modal="true"
           aria-labelledby="perc-enter-title"
+          onKeyDown={(event) => {
+            if (event.key === "Tab") {
+              event.preventDefault();
+              buttonRef.current?.focus();
+            }
+          }}
         >
-          <div className="w-full max-w-md text-center">
-            <svg viewBox="0 0 64 64" className="mx-auto size-16" aria-hidden="true">
-              <defs>
-                <linearGradient id="enter-sol" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stopColor="#9945FF" />
-                  <stop offset="1" stopColor="#14F195" />
-                </linearGradient>
-              </defs>
-              <circle className="enter-ring" cx="32" cy="32" r="22" fill="none" stroke="url(#enter-sol)" strokeWidth="1.4" />
-              <circle cx="32" cy="32" r="16" fill="none" stroke="white" strokeOpacity="0.25" strokeWidth="0.6" />
-              <path d="M22 32H42" stroke="#14F195" strokeWidth="2" />
-            </svg>
-            <h1 id="perc-enter-title" className="enter-line mt-8 font-serif text-[clamp(4.5rem,14vw,6.5rem)] leading-none tracking-[-0.05em]">
-              PERC
-            </h1>
-            <p className="enter-line mx-auto mt-6 max-w-sm text-[16px] leading-relaxed text-foreground/70" style={{ animationDelay: "0.4s" }}>
-              An independent desk, not the official Percolator. One market is one slab. Each asset keeps its own insurance. Nothing here takes a deposit.
-            </p>
-            <button
-              ref={buttonRef}
-              type="button"
-              onClick={go}
-              className="enter-line mt-10 font-serif text-[2rem] leading-none text-[#14F195] italic underline decoration-[#14F195]/30 underline-offset-8 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
-              style={{ animationDelay: "0.7s" }}
-            >
-              Open
-            </button>
+          <div className="flex h-full flex-col border border-white/15 px-6 sm:px-10">
+            <p className="pt-6 font-mono text-[12px] tracking-[0.22em] text-white/45">PERC</p>
+            <div className="flex flex-1 flex-col justify-end pb-[max(2.5rem,env(safe-area-inset-bottom))]">
+              <div className="w-full max-w-xl">
+                <h1
+                  id="perc-enter-title"
+                  className="font-serif text-[clamp(3.2rem,8vw,5.2rem)] leading-[0.9] tracking-[-0.045em] text-white"
+                >
+                  One market is one slab.
+                </h1>
+                <button
+                  ref={buttonRef}
+                  type="button"
+                  onClick={go}
+                  className="mt-8 flex h-14 w-full cursor-pointer items-center justify-center border border-white/40 bg-transparent text-[16px] text-white touch-manipulation hover:bg-white hover:text-[#07060b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:bg-white active:text-[#07060b]"
+                >
+                  Open
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       ) : null}

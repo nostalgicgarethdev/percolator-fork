@@ -79,17 +79,13 @@ export function Slab() {
 
   return (
     <div>
-      <header className="mx-auto max-w-2xl px-2 pt-6 pb-2 text-center">
-        <p className="text-[13px] text-muted-foreground">Independent. Not the official engine.</p>
-        <h1 className="mt-3 font-serif text-[clamp(2.5rem,6vw,3.8rem)] leading-[0.95] tracking-[-0.045em]">
+      <header className="max-w-xl px-1 pt-8 pb-4 sm:pt-10">
+        <h1 className="font-serif text-[clamp(2rem,4vw,2.65rem)] leading-[1.05] tracking-[-0.035em]">
           One market is one slab.
         </h1>
-        <p className="mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-foreground/80">
-          Many assets sit in one account. A trade reads only the assets a trader holds, so the cost stays
-          bounded as the slab grows. Each asset keeps its own insurance. What a well cannot cover is cut. It
-          does not come out of another well.
+        <p className="mt-3 text-[15px] leading-relaxed text-foreground/75">
+          A trade reads only the book of the trader who sent it. Insurance stays in its well.
         </p>
-        <p className="mt-3 text-[14px] text-muted-foreground">Green is paid. Purple is the cut. The bead is the mark.</p>
       </header>
       <label className="sr-only" htmlFor="perc-mark">
         Example mark
@@ -124,7 +120,7 @@ export function Slab() {
         {attempt.toFixed(0)}
       </p>
       <p className="mt-2 text-center text-[13px] text-muted-foreground">mark</p>
-      <p className="mt-6 text-center font-serif text-[1.85rem] leading-none tracking-[-0.03em] italic">{status}</p>
+      <p className="mt-5 text-center text-[15px] text-foreground/80">{status}</p>
       <p className="mt-3 text-center text-[15px] text-muted-foreground">
         {blocked
           ? `Book holds at ${applied.toFixed(0)}.`
@@ -159,7 +155,7 @@ export function Slab() {
           <button
             type="button"
             onClick={crank}
-            className="font-serif text-[1.7rem] leading-none text-[#14F195] italic underline decoration-[#14F195]/30 underline-offset-8 focus-visible:ring-2 focus-visible:ring-white focus-visible:outline-none"
+            className="inline-flex h-12 min-w-28 cursor-pointer items-center justify-center border border-white/30 px-6 text-[15px] text-white touch-manipulation hover:bg-white hover:text-[#07060b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:bg-white active:text-[#07060b]"
           >
             Crank
           </button>
@@ -191,8 +187,8 @@ export function Slab() {
           </button>
         </div>
       </div>
-      <p className="mt-14 text-center text-[13px] text-muted-foreground">
-        Example atoms. The engine is in the source and is not deployed here. This host takes nothing.
+      <p className="mt-16 max-w-xl text-[13px] leading-relaxed text-muted-foreground">
+        Example atoms. Independent, not the official engine. This host takes nothing.
       </p>
     </div>
   );
