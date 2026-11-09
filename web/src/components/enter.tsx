@@ -57,7 +57,7 @@ export function Enter({ children }: { children: React.ReactNode }) {
               PERC
             </h1>
             <p className="enter-line mx-auto mt-6 max-w-sm text-[16px] leading-relaxed text-foreground/70" style={{ animationDelay: "0.4s" }}>
-              An independent desk, not the official Percolator. Drag one mark. Four assets answer. Green is paid. Purple is the cut. Nothing here takes a deposit.
+              An independent desk, not the official Percolator. Spin the glass. Drag the heat. Green is paid. Purple is the cut. Nothing here takes a deposit.
             </p>
             <button
               ref={buttonRef}
