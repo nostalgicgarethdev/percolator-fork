@@ -92,16 +92,13 @@ export function Slab() {
             strokeWidth="3"
           />
         </svg>
-        <div className="pointer-events-none absolute inset-x-0 top-[30%] text-center">
+        <div className="pointer-events-none absolute inset-x-0 top-[27%] text-center">
           <p
             className={`font-serif text-[clamp(4.6rem,12vw,6.4rem)] leading-none tracking-[-0.045em] ${
               blocked ? "text-destructive" : "text-foreground"
             }`}
           >
             {attempt.toFixed(0)}
-          </p>
-          <p className="mt-2 font-mono text-[11px] tracking-[0.14em] text-muted-foreground uppercase">
-            {blocked ? `holds ${applied.toFixed(0)}` : `entry ${ENTRY}`}
           </p>
         </div>
         <label className="sr-only" htmlFor="perc-mark">
@@ -119,7 +116,10 @@ export function Slab() {
         />
       </div>
 
-      <p className="mx-auto mt-2 max-w-md text-center font-serif text-[1.65rem] leading-none tracking-[-0.03em]">
+      <p className="mt-1 text-center font-mono text-[11px] tracking-[0.16em] text-muted-foreground uppercase">
+        {blocked ? `holds ${applied.toFixed(0)}` : `entry ${ENTRY}`}
+      </p>
+      <p className="mx-auto mt-3 max-w-md text-center font-serif text-[1.65rem] leading-none tracking-[-0.03em]">
         {status}
       </p>
 
