@@ -24,11 +24,10 @@ const plex = IBM_Plex_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.percolator.beer"),
   title: "PERC — independent perpetuals desk",
-  description:
-    "See how a perpetual desk is put together. This host is read-only: no engine, no deposits, no public trading.",
+  description: "Push an example mark. See what one asset can pay. This host takes no deposit.",
   openGraph: {
     title: "PERC",
-    description: "A read-only look at a perpetual desk. No deposits and no public trading on this host.",
+    description: "Push an example mark. See what one asset can pay. This host takes no deposit.",
     images: ["/brand/perc-square-1024.png"],
   },
 };

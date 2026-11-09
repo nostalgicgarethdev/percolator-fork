@@ -131,10 +131,8 @@
     @apply text-foreground overflow-x-clip antialiased;
     font-feature-settings: "kern" 1;
     background:
-      radial-gradient(900px 520px at 8% -10%, oklch(0.78 0.09 210 / 28%), transparent 60%),
-      radial-gradient(720px 480px at 100% 0%, oklch(0.72 0.08 165 / 18%), transparent 55%),
-      radial-gradient(680px 460px at 70% 120%, oklch(0.62 0.1 280 / 16%), transparent 50%),
-      oklch(0.13 0.02 255);
+      radial-gradient(720px 520px at 50% 0%, oklch(0.78 0.08 210 / 18%), transparent 58%),
+      oklch(0.11 0.018 255);
   }
   ::selection {
     background: oklch(0.86 0.05 200 / 40%);
@@ -252,5 +250,31 @@ html[data-entered="1"] .enter-screen {
   height: 18px;
   border: 0;
   border-radius: 999px;
+  background: #f4f7f8;
+}
+
+.perc-range-bare::-webkit-slider-runnable-track {
+  height: 22px;
+  background: transparent;
+}
+
+.perc-range-bare::-webkit-slider-thumb {
+  width: 14px;
+  height: 14px;
+  margin-top: 4px;
+  background: #f4f7f8;
+  box-shadow:
+    0 0 0 1px oklch(0.11 0.018 255),
+    0 0 0 5px oklch(0.86 0.05 200 / 40%);
+}
+
+.perc-range-bare::-moz-range-track {
+  height: 22px;
+  background: transparent;
+}
+
+.perc-range-bare::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
   background: #f4f7f8;
 }
