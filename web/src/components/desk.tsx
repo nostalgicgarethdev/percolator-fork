@@ -125,26 +125,6 @@ export function Desk() {
         <StatusRail phase={phase} />
       </header>
 
-      {phase !== "attached" ? (
-        <section className="glass mt-4 rounded-[28px] px-5 py-5" aria-labelledby="desk-guide">
-          <h2 id="desk-guide" className="text-[16px] font-medium tracking-[-0.03em]">
-            {phase === "checking" ? "Looking for a local engine." : "This terminal is blank on purpose."}
-          </h2>
-          <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-muted-foreground">
-            {phase === "checking"
-              ? "If nothing answers, the sheet stays empty. That empty sheet is not a price."
-              : "This host does not run an engine. There is no live price, no deposit, and no trade. Open, funding, and close only work after you start the engine on your own computer, and even then the numbers are examples in memory."}
-          </p>
-          {phase === "disconnected" ? (
-            <p className="mt-3 text-[14px]">
-              <Link href="/how-it-works" className="underline-offset-2 hover:underline">
-                See what each piece does
-              </Link>
-            </p>
-          ) : null}
-        </section>
-      ) : null}
-
       <div role="status" aria-live="polite" aria-atomic="true">
         {error && !quietDisconnect ? (
           <p className="border-b border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive sm:px-4" role="alert">
@@ -153,6 +133,23 @@ export function Desk() {
         ) : null}
       </div>
 
+      {phase !== "attached" ? (
+        <section className="mt-16 max-w-xl px-1" aria-labelledby="mark-sheet-title">
+          <h2
+            id="mark-sheet-title"
+            className="font-serif text-[clamp(2.6rem,7vw,4rem)] leading-none tracking-[-0.04em]"
+          >
+            {phase === "checking" ? "Checking." : "Blank."}
+          </h2>
+          <p className="mt-5 text-[16px] leading-relaxed text-foreground/75">
+            {phase === "checking"
+              ? "Looking for a local engine. This is not a price."
+              : "No engine is attached, so there is no mark. The sheet does not invent one."}
+          </p>
+        </section>
+      ) : null}
+
+      {phase === "attached" ? (
       <main className="mt-4 flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_22.5rem] lg:items-start">
         <div className="glass contents overflow-hidden rounded-[28px] lg:block lg:min-w-0">
           <MarkSheet state={connected ? state : null} phase={phase} className="order-1" />
@@ -221,6 +218,7 @@ export function Desk() {
           withdrawAmount={connected ? (state?.trader.capital_atoms ?? "0") : "0"}
         />
       </main>
+      ) : null}
 
       <footer className="glass mt-4 rounded-[28px] px-5 py-4 text-[12px] leading-relaxed text-muted-foreground">
         <p>
@@ -311,7 +309,7 @@ function MarkSheet({
           </>
         ) : (
           <>
-            <p className="font-serif text-[clamp(2.1rem,6vw,3.4rem)] leading-none font-medium italic tracking-[-0.03em]">
+            <p className="font-serif text-[clamp(2.1rem,6vw,3.4rem)] leading-none tracking-[-0.03em]">
               {quiet}
             </p>
             <span className="mt-3 h-px w-10 bg-primary" aria-hidden />
