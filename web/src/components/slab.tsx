@@ -6,7 +6,7 @@ import type { Well } from "@/components/machine";
 
 const Machine = dynamic(() => import("@/components/machine").then((mod) => mod.Machine), {
   ssr: false,
-  loading: () => <div className="h-[min(70vh,640px)] min-h-[440px]" />,
+  loading: () => <div className="h-[min(48vh,460px)] min-h-[340px]" />,
 });
 
 const ENTRY = 100;
@@ -79,6 +79,18 @@ export function Slab() {
 
   return (
     <div>
+      <header className="mx-auto max-w-2xl px-2 pt-6 pb-2 text-center">
+        <p className="text-[13px] text-muted-foreground">Independent. Not the official engine.</p>
+        <h1 className="mt-3 font-serif text-[clamp(2.5rem,6vw,3.8rem)] leading-[0.95] tracking-[-0.045em]">
+          One market is one slab.
+        </h1>
+        <p className="mx-auto mt-4 max-w-xl text-[16px] leading-relaxed text-foreground/80">
+          Many assets sit in one account. A trade reads only the assets a trader holds, so the cost stays
+          bounded as the slab grows. Each asset keeps its own insurance. What a well cannot cover is cut. It
+          does not come out of another well.
+        </p>
+        <p className="mt-3 text-[14px] text-muted-foreground">Green is paid. Purple is the cut. The bead is the mark.</p>
+      </header>
       <label className="sr-only" htmlFor="perc-mark">
         Example mark
       </label>
@@ -114,7 +126,11 @@ export function Slab() {
       <p className="mt-2 text-center text-[13px] text-muted-foreground">mark</p>
       <p className="mt-6 text-center font-serif text-[1.85rem] leading-none tracking-[-0.03em] italic">{status}</p>
       <p className="mt-3 text-center text-[15px] text-muted-foreground">
-        {blocked ? `Book holds at ${applied.toFixed(0)}.` : flat ? "Same mark. Four wells." : `From ${ENTRY}.`}
+        {blocked
+          ? `Book holds at ${applied.toFixed(0)}.`
+          : flat
+            ? "Insurance is sitting in each well."
+            : "The loser pays first. Then that well."}
       </p>
 
       {flat ? null : (
@@ -175,7 +191,9 @@ export function Slab() {
           </button>
         </div>
       </div>
-      <p className="mt-14 text-center text-[13px] text-muted-foreground">Example atoms. This host takes nothing.</p>
+      <p className="mt-14 text-center text-[13px] text-muted-foreground">
+        Example atoms. The engine is in the source and is not deployed here. This host takes nothing.
+      </p>
     </div>
   );
 }

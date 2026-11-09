@@ -78,7 +78,7 @@ export function Machine({ attempt, applied, anchor, blocked, assetId, wells, onA
     <div className="relative mx-auto w-full">
       <canvas
         ref={canvasRef}
-        className="block h-[min(70vh,640px)] min-h-[440px] w-full touch-none"
+        className="block h-[min(48vh,460px)] min-h-[340px] w-full touch-none"
         aria-hidden="true"
       />
       <div className="pointer-events-none absolute inset-0" role="listbox" aria-label="Assets in the account">
