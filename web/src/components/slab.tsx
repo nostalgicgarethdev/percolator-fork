@@ -77,7 +77,7 @@ export function Slab() {
           PERC
         </h1>
         <p className="mt-4 max-w-md text-[clamp(1.35rem,2.2vw,1.85rem)] leading-[1.05] tracking-[-0.04em]">
-          Push the mark. This asset pays, or it doesn't.
+          Push the mark. This asset pays, or it does not.
         </p>
 
         <div className="relative mt-8 aspect-square w-full max-w-[420px]">
