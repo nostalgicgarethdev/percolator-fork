@@ -78,10 +78,11 @@ export function Slab() {
   const blocked = attempt !== applied;
   const book = useMemo(() => settle(applied, lots, asset.insurance), [applied, lots, asset.insurance]);
   const paidRatio = book.win === 0 ? 0 : book.paid / book.win;
+  const flat = book.win === 0;
   const status = blocked
     ? "One crank. Six points."
-    : book.win === 0
-      ? "At the entry."
+    : flat
+      ? "Drag the arc."
       : book.cut === 0
         ? "Paid in full."
         : "The rest is cut.";
@@ -189,60 +190,69 @@ export function Slab() {
           <circle cx={thumb.x} cy={thumb.y} r="6.2" fill="none" stroke={blocked ? "#9945FF" : "#14F195"} strokeOpacity="0.45" strokeWidth="0.6" />
           <circle cx={thumb.x} cy={thumb.y} r="2.6" fill={blocked ? "#9945FF" : "#14F195"} />
         </svg>
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center pb-[12%]">
-          <p
-            className={`font-serif text-[clamp(4.8rem,13vw,7rem)] leading-none tracking-[-0.05em] ${
-              blocked ? "text-[#9945FF]" : "text-foreground"
-            }`}
-          >
-            {attempt.toFixed(0)}
-          </p>
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center pb-[10%]">
+          <div className="text-center">
+            <p
+              className={`font-serif text-[clamp(4.8rem,13vw,7rem)] leading-none tracking-[-0.05em] ${
+                blocked ? "text-[#9945FF]" : "text-foreground"
+              }`}
+            >
+              {attempt.toFixed(0)}
+            </p>
+            <p className="mt-3 text-[13px] text-muted-foreground">mark</p>
+          </div>
         </div>
       </div>
 
       <p className="mt-1 text-center font-serif text-[1.85rem] leading-none tracking-[-0.03em] italic">{status}</p>
-      <p className="mt-3 text-center text-[13px] text-muted-foreground">
-        {blocked ? `Holding ${applied.toFixed(0)}` : `Entry ${ENTRY}`}
-      </p>
-      <div className="mx-auto mt-5 h-[2px] w-44 bg-white/10">
-        {book.win > 0 ? (
-          <div className="flex h-full">
-            <div className="h-full bg-[#14F195]" style={{ width: `${paidRatio * 100}%` }} />
-            <div className="h-full bg-[#9945FF]" style={{ width: `${(1 - paidRatio) * 100}%` }} />
+      {flat ? (
+        <div className="mt-4 space-y-2 text-center text-[15px] leading-relaxed text-muted-foreground">
+          <p>The violet band is six points.</p>
+          <p>Long and short each start with {atoms(CAPITAL)}.</p>
+        </div>
+      ) : (
+        <>
+          <p className="mt-3 text-center text-[13px] text-muted-foreground">
+            {blocked ? `Holding ${applied.toFixed(0)}` : `From ${ENTRY}`}
+          </p>
+          <div className="mx-auto mt-5 h-[2px] w-44 bg-white/10">
+            <div className="flex h-full">
+              <div className="h-full bg-[#14F195]" style={{ width: `${paidRatio * 100}%` }} />
+              <div className="h-full bg-[#9945FF]" style={{ width: `${(1 - paidRatio) * 100}%` }} />
+            </div>
           </div>
-        ) : null}
-      </div>
-      <p className="mt-3 text-center text-[13px]">
-        <span className={book.paid > 0 ? "text-[#14F195]" : "text-muted-foreground"}>paid {atoms(book.paid)}</span>
-        <span className="px-2 text-white/25">·</span>
-        <span className={book.cut > 0 ? "text-[#9945FF]" : "text-muted-foreground"}>cut {atoms(book.cut)}</span>
-      </p>
-
-      <div className="mx-auto mt-14 grid max-w-md grid-cols-2">
-        <Side
-          name="Long"
-          align="right"
-          winning={book.longWins}
-          paid={book.paid}
-          cut={book.cut}
-          loss={book.shortWins ? book.fromLoser : 0}
-        />
-        <Side
-          name="Short"
-          align="left"
-          winning={book.shortWins}
-          paid={book.paid}
-          cut={book.cut}
-          loss={book.longWins ? book.fromLoser : 0}
-        />
-      </div>
+          <p className="mt-3 text-center text-[13px]">
+            <span className={book.paid > 0 ? "text-[#14F195]" : "text-muted-foreground"}>paid {atoms(book.paid)}</span>
+            <span className="px-2 text-white/25">·</span>
+            <span className={book.cut > 0 ? "text-[#9945FF]" : "text-muted-foreground"}>cut {atoms(book.cut)}</span>
+          </p>
+          <div className="mx-auto mt-14 grid max-w-md grid-cols-2">
+            <Side
+              name="Long"
+              align="right"
+              winning={book.longWins}
+              paid={book.paid}
+              cut={book.cut}
+              loss={book.shortWins ? book.fromLoser : 0}
+            />
+            <Side
+              name="Short"
+              align="left"
+              winning={book.shortWins}
+              paid={book.paid}
+              cut={book.cut}
+              loss={book.longWins ? book.fromLoser : 0}
+            />
+          </div>
+        </>
+      )}
 
       <div className="mx-auto mt-16 max-w-md" role="listbox" aria-label="Assets in the account">
         <p className="pb-3 text-[13px] text-muted-foreground">Insurance stays with the asset.</p>
         {ASSETS.map((item) => {
           const on = item.id === assetId;
           const row = settle(applied, lots, item.insurance);
-          const note = row.win === 0 ? "flat" : row.cut === 0 ? "pays" : `cut ${atoms(row.cut)}`;
+          const note = row.win === 0 ? "no move" : row.cut === 0 ? "pays" : `cut ${atoms(row.cut)}`;
           const noteClass = row.win === 0 ? "text-muted-foreground" : row.cut === 0 ? "text-[#14F195]" : "text-[#9945FF]";
           return (
             <button
