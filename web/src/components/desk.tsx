@@ -11,6 +11,7 @@ import {
   groupInteger,
   lotsFromQ,
 } from "@/lib/engine";
+import { applyExample, openExampleSession } from "@/lib/example-session";
 
 const ENGINE = "4db11a8cb0053815e23a35d3a7d3edc265d8d866";
 const PROGRAM = "5cb331dde354517c6371a8acf92cecb194f3bb73";
@@ -29,33 +30,43 @@ export function Desk() {
   const [funding, setFunding] = useState("10000");
   const longRef = useRef<HTMLButtonElement>(null);
   const shortRef = useRef<HTMLButtonElement>(null);
+  const sourceRef = useRef<"pending" | "engine" | "example">("pending");
+  const exampleRef = useRef<EngineState | null>(null);
   const lockId = useId();
+
+  const attachExample = useCallback(() => {
+    if (sourceRef.current === "example" && exampleRef.current) return;
+    const session = openExampleSession();
+    sourceRef.current = "example";
+    exampleRef.current = session;
+    setConnected(true);
+    setPhase("attached");
+    setState(session);
+    setError(null);
+    setPrice((current) => (current === "" ? String(session.market.effective_price) : current));
+  }, []);
 
   const load = useCallback(async () => {
     try {
       const response = await fetch("/api/engine/v1/state", { cache: "no-store" });
       const body = await response.json();
-      if (!response.ok) {
-        setConnected(false);
-        setPhase("disconnected");
-        setState(null);
-        setError(body.error ?? "Local engine did not respond.");
+      if (response.ok && body.market) {
+        sourceRef.current = "engine";
+        exampleRef.current = null;
+        setConnected(true);
+        setPhase("attached");
+        setState(body as EngineState);
+        setError(null);
+        setPrice((current) =>
+          current === "" ? String((body as EngineState).market.effective_price) : current,
+        );
         return;
       }
-      setConnected(true);
-      setPhase("attached");
-      setState(body as EngineState);
-      setError(null);
-      setPrice((current) =>
-        current === "" ? String((body as EngineState).market.effective_price) : current,
-      );
     } catch {
-      setConnected(false);
-      setPhase("disconnected");
-      setState(null);
-      setError("Local engine is not reachable.");
+      /* the page session covers a missing process */
     }
-  }, []);
+    attachExample();
+  }, [attachExample]);
 
   useEffect(() => {
     void load();
@@ -66,6 +77,18 @@ export function Desk() {
   async function call(path: string, payload?: unknown) {
     setBusy(true);
     setError(null);
+    if (sourceRef.current === "example" && exampleRef.current) {
+      const result = applyExample(
+        exampleRef.current,
+        path,
+        payload && typeof payload === "object" ? (payload as Record<string, unknown>) : undefined,
+      );
+      exampleRef.current = result.state;
+      setState(result.state);
+      setError(result.error ?? null);
+      setBusy(false);
+      return;
+    }
     try {
       const response = await fetch(path, {
         method: "POST",
@@ -91,10 +114,13 @@ export function Desk() {
   }
 
   const disabled = !connected || busy;
+  const example = state?.mode === "example-session";
   const quietDisconnect =
     !!error && /not reachable|did not respond|connection dropped/i.test(error);
   const lockText = phase === "checking"
     ? "Checking whether a local engine is attached. Buttons stay off until it answers."
+    : example
+    ? "Example atoms in this page. Not a chain. The v16 engine still runs only on your machine."
     : !connected
     ? "Buttons stay off. This host has no engine, so it cannot take a deposit or place a trade."
     : busy
@@ -121,10 +147,16 @@ export function Desk() {
         <div className="flex items-baseline justify-between gap-3 px-5 py-4">
           <h1 className="text-[10px] font-medium tracking-[0.2em] uppercase">Terminal</h1>
           <p className="font-mono text-[10px] text-muted-foreground">
-            {phase === "checking" ? "Checking" : phase === "attached" ? "Engine attached" : "Disconnected"}
+            {phase === "checking"
+              ? "Checking"
+              : example
+                ? "Example session"
+                : phase === "attached"
+                  ? "Engine attached"
+                  : "Disconnected"}
           </p>
         </div>
-        <StatusRail phase={phase} />
+        <StatusRail phase={phase} example={example} />
       </header>
 
       <div role="status" aria-live="polite" aria-atomic="true">
@@ -213,6 +245,7 @@ export function Desk() {
           setFunding={setFunding}
           markCap={connected ? state?.risk.max_price_move_bps_per_slot : undefined}
           fundingCap={connected ? state?.risk.max_abs_funding_e9_per_slot : undefined}
+          example={example}
           onSubmit={(path, payload) => {
             if (disabled) return;
             void call(path, payload);
@@ -237,12 +270,18 @@ export function Desk() {
   );
 }
 
-function StatusRail({ phase }: { phase: "checking" | "attached" | "disconnected" }) {
+function StatusRail({
+  phase,
+  example,
+}: {
+  phase: "checking" | "attached" | "disconnected";
+  example: boolean;
+}) {
   const cells = [
-    ["Local", phase === "checking" ? "Checking" : phase === "attached" ? "Engine" : "Idle"],
+    ["Local", phase === "checking" ? "Checking" : example ? "Example" : phase === "attached" ? "Engine" : "Idle"],
     ["Chain", "Not deployed"],
-    ["Link", phase === "checking" ? "Checking" : phase === "attached" ? "Attached" : "Disconnected"],
-    ["Session", phase === "attached" ? "Local writes" : "Read-only"],
+    ["Link", phase === "checking" ? "Checking" : example ? "In this page" : phase === "attached" ? "Attached" : "Disconnected"],
+    ["Session", example ? "Example atoms" : phase === "attached" ? "Local writes" : "Read-only"],
   ] as const;
   return (
     <div
@@ -540,6 +579,7 @@ function Ticket({
   setFunding,
   markCap,
   fundingCap,
+  example,
   onSubmit,
   withdrawAmount,
 }: {
@@ -563,6 +603,7 @@ function Ticket({
   setFunding: (value: string) => void;
   markCap: number | undefined;
   fundingCap: number | undefined;
+  example: boolean;
   onSubmit: (path: string, payload?: unknown) => void;
   withdrawAmount: string;
 }) {
@@ -693,7 +734,10 @@ function Ticket({
         <p className="text-[11px] leading-relaxed text-muted-foreground">
           One crank may move the mark at most {markCap === undefined ? "—" : `${markCap} bps`} and
           funding at most {fundingCap === undefined ? "—" : `±${fundingCap} e9`}. A larger jump is
-          rejected. Refresh settles accrued funding and price PnL onto the portfolios.
+          rejected.{" "}
+          {example
+            ? "Posted capital pays the move. Anything past that capital is cut."
+            : "Refresh settles accrued funding and price PnL onto the portfolios."}
         </p>
         <Action
           type="button"
@@ -748,8 +792,9 @@ function Ticket({
           Reset session
         </Action>
         <p className="text-[11px] leading-relaxed text-muted-foreground">
-          Arming reloads the upstream undercollateralized-short fixture and stops before
-          liquidation. The next liquidate call is the engine step. It does not invent a fill.
+          {example
+            ? "Crank until one side has no capital left, then liquidate that side. This page does not load a fixture."
+            : "Arming reloads the upstream undercollateralized-short fixture and stops before liquidation. The next liquidate call is the engine step. It does not invent a fill."}
         </p>
       </div>
     </aside>

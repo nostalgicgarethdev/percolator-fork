@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { Well } from "@/components/machine";
 
@@ -188,7 +189,10 @@ export function Slab() {
         </div>
       </div>
       <p className="mt-16 max-w-xl text-[13px] leading-relaxed text-muted-foreground">
-        Example atoms. Independent, not the official engine. This host takes nothing.
+        Example atoms. Independent, not the official engine. This host takes nothing.{" "}
+        <Link href="/terminal" className="text-foreground underline-offset-2 hover:underline">
+          The terminal runs an example session.
+        </Link>
       </p>
     </div>
   );
