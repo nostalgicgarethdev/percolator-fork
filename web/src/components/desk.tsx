@@ -108,12 +108,14 @@ export function Desk() {
 
   return (
     <div className="terminal mx-auto w-full max-w-6xl px-4 pt-6 pb-12 text-foreground sm:px-6">
-      <a
-        href="#engine-ticket"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
-      >
-        Skip to engine ticket
-      </a>
+      {phase === "attached" ? (
+        <a
+          href="#engine-ticket"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
+        >
+          Skip to engine ticket
+        </a>
+      ) : null}
 
       <header className="glass rounded-[28px]">
         <div className="flex items-baseline justify-between gap-3 px-5 py-4">
