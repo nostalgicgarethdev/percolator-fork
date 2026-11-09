@@ -1,19 +1,18 @@
 import type { Metadata } from "next";
-import { Barlow, IBM_Plex_Mono, Newsreader } from "next/font/google";
+import { IBM_Plex_Mono, Instrument_Sans, Instrument_Serif } from "next/font/google";
 import { Shell } from "@/components/shell";
 import "./globals.css";
 
-const barlow = Barlow({
+const sans = Instrument_Sans({
   variable: "--font-barlow",
   subsets: ["latin"],
   weight: ["400", "500", "600"],
 });
 
-const newsreader = Newsreader({
+const serif = Instrument_Serif({
   variable: "--font-newsreader",
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  weight: ["400", "500"],
+  weight: ["400"],
 });
 
 const plex = IBM_Plex_Mono({
@@ -42,7 +41,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${barlow.variable} ${newsreader.variable} ${plex.variable}`}
+      className={`dark ${sans.variable} ${serif.variable} ${plex.variable}`}
     >
       <body className="min-h-dvh antialiased">
         <script

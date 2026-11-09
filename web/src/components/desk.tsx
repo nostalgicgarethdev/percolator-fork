@@ -107,7 +107,7 @@ export function Desk() {
   }
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="terminal mx-auto w-full max-w-6xl px-4 pt-6 pb-12 text-foreground sm:px-6">
       <a
         href="#engine-ticket"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-foreground"
@@ -115,8 +115,8 @@ export function Desk() {
         Skip to engine ticket
       </a>
 
-      <header className="border-b border-border">
-        <div className="flex items-baseline justify-between gap-3 px-3 py-2 sm:px-4">
+      <header className="glass rounded-[28px]">
+        <div className="flex items-baseline justify-between gap-3 px-5 py-4">
           <h1 className="text-[10px] font-medium tracking-[0.2em] uppercase">Terminal</h1>
           <p className="font-mono text-[10px] text-muted-foreground">
             {phase === "checking" ? "Checking" : phase === "attached" ? "Engine attached" : "Disconnected"}
@@ -133,8 +133,8 @@ export function Desk() {
         ) : null}
       </div>
 
-      <main className="flex flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_22.5rem] lg:items-start">
-        <div className="contents lg:block lg:min-w-0 lg:border-r lg:border-border">
+      <main className="mt-4 flex flex-col gap-4 lg:grid lg:grid-cols-[minmax(0,1fr)_22.5rem] lg:items-start">
+        <div className="glass contents overflow-hidden rounded-[28px] lg:block lg:min-w-0">
           <MarkSheet state={connected ? state : null} phase={phase} className="order-1" />
           <MarketBoard state={connected ? state : null} className="order-2" />
           <section
@@ -202,7 +202,7 @@ export function Desk() {
         />
       </main>
 
-      <footer className="border-t border-border px-3 py-3 text-[11px] leading-relaxed text-muted-foreground sm:px-4">
+      <footer className="glass mt-4 rounded-[28px] px-5 py-4 text-[12px] leading-relaxed text-muted-foreground">
         <p>
           PERC is an independent Percolator fork. Not endorsed by Anatoly Yakovenko, Solana Labs,
           or the operators of percolator.trade. This interface does not use that site&apos;s brand.
@@ -226,13 +226,13 @@ function StatusRail({ phase }: { phase: "checking" | "attached" | "disconnected"
   ] as const;
   return (
     <div
-      className="grid grid-cols-2 gap-px border-t border-border bg-border sm:grid-cols-4 lg:ml-auto lg:w-[36rem] lg:border-t-0 lg:border-l"
+      className="grid grid-cols-2 border-t border-white/10 sm:grid-cols-4"
       aria-label="Connection status"
     >
       {cells.map(([key, value]) => {
         const live = phase === "attached" && (key === "Local" || key === "Link" || key === "Session");
         return (
-          <div key={key} className="min-w-0 bg-background px-3 py-2 sm:px-4">
+          <div key={key} className="min-w-0 px-5 py-3">
             <p className="text-[9px] font-medium tracking-[0.18em] text-muted-foreground uppercase">
               {key}
             </p>
@@ -550,7 +550,7 @@ function Ticket({
     <aside
       id="engine-ticket"
       aria-labelledby="ticket-title"
-      className={`border-t border-border bg-card lg:sticky lg:top-0 lg:max-h-dvh lg:self-start lg:overflow-y-auto lg:border-t-0 ${className}`}
+      className={`glass rounded-[28px] lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:self-start lg:overflow-y-auto ${className}`}
     >
       <div className="flex items-baseline justify-between gap-3 border-b border-border px-3 py-2.5 sm:px-4">
         <h2 id="ticket-title" className="text-[10px] font-medium tracking-[0.2em] uppercase">
@@ -602,7 +602,7 @@ function Ticket({
           <div
             role="radiogroup"
             aria-labelledby="side-label"
-            className="grid grid-cols-2 border border-input"
+            className="grid grid-cols-2 overflow-hidden rounded-full border border-white/15"
             onKeyDown={(event) => {
               if (event.key === "ArrowRight" || event.key === "ArrowDown") {
                 event.preventDefault();
@@ -759,7 +759,7 @@ function Field({
         inputMode="numeric"
         autoComplete="off"
         spellCheck={false}
-        className="h-11 rounded-sm bg-background font-mono text-sm tabular-nums lg:h-8"
+        className="h-11 rounded-2xl border-white/15 bg-white/6 font-mono text-sm tabular-nums"
       />
     </div>
   );
@@ -777,7 +777,7 @@ function Action({
     <Button
       variant={locked ? "outline" : variant}
       aria-describedby={describedBy}
-      className={`h-11 w-full rounded-sm px-3 text-[13px] font-medium tracking-[0.01em] lg:h-8 ${
+      className={`h-11 w-full rounded-full px-3 text-[13px] font-medium ${
         locked ? "border-border text-muted-foreground" : className
       }`}
       {...props}
@@ -806,7 +806,7 @@ function SideButton({
       aria-checked={pressed}
       tabIndex={pressed ? 0 : -1}
       onClick={onSelect}
-      className={`h-11 text-[13px] font-medium outline-none focus-visible:relative focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring lg:h-8 ${
+      className={`h-11 text-[13px] font-medium outline-none focus-visible:relative focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-ring ${
         pressed ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
       }`}
     >

@@ -1,6 +1,6 @@
 # PERC
 
-The interface is branded PERC. The repository and the Vercel project stay `percolator-fork`. interface
+The interface is branded PERC. The repository and the Vercel project stay `percolator-fork`.
 
 Next.js desk for the local Percolator v16 engine. On a host with no `fork-engine` process, including this Vercel project, the page stays disconnected and read-only. It does not show a live market.
 

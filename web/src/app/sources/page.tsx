@@ -11,19 +11,19 @@ const PROGRAM = "5cb331dde354517c6371a8acf92cecb194f3bb73";
 
 export default function SourcesPage() {
   return (
-    <main>
-      <header className="border-b border-border px-4 py-8 sm:px-8">
-        <p className="text-[10px] font-medium tracking-[0.2em] text-muted-foreground uppercase">Sources</p>
-        <h1 className="mt-2 max-w-[36rem] font-serif text-[clamp(1.8rem,4vw,2.6rem)] leading-tight italic">
+    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      <header className="max-w-3xl">
+        <p className="text-[13px] text-muted-foreground">Sources</p>
+        <h1 className="mt-3 font-serif text-[clamp(2.4rem,5vw,4rem)] leading-[0.95] tracking-[-0.04em]">
           Public upstream. Published desk.
         </h1>
-        <p className="mt-4 max-w-[44rem] text-[15px] leading-relaxed text-muted-foreground">
+        <p className="mt-5 text-[17px] leading-relaxed text-muted-foreground">
           The engine and the Solana wrapper are Anatoly Yakovenko&apos;s Apache-2.0 code. Upstream
           says the work is educational, unaudited, and not for production or real funds. PERC does
           not change that warning, and it is not an endorsement by the author.
         </p>
       </header>
-      <div className="grid border-b border-border md:grid-cols-2">
+      <div className="mt-10 grid gap-4 md:grid-cols-2">
         <SourceCard
           label="Risk engine"
           href="https://github.com/aeyakovenko/percolator"
@@ -35,22 +35,21 @@ export default function SourcesPage() {
           href="https://github.com/aeyakovenko/percolator-prog"
           name="aeyakovenko/percolator-prog"
           pin={PROGRAM}
-          className="border-t border-border md:border-t-0 md:border-l"
         />
         <SourceCard
           label="This website"
           href="https://github.com/nostalgicgarethdev/percolator-fork"
           name="nostalgicgarethdev/percolator-fork"
           pin="snapshot 666c4fa72aae30555b12b9451b33637e19baf636"
-          className="border-t border-border md:col-span-2"
+          className="md:col-span-2"
         />
       </div>
-      <section className="space-y-4 px-4 py-8 text-[15px] leading-relaxed text-muted-foreground sm:px-8">
+      <section className="glass mt-4 space-y-4 rounded-[28px] px-6 py-6 text-[15px] leading-relaxed text-muted-foreground">
         <p>
           This website&apos;s source is published at{" "}
           <a
             href="https://github.com/nostalgicgarethdev/percolator-fork"
-            className="text-primary underline-offset-2 hover:underline"
+            className="text-foreground underline-offset-2 hover:underline"
           >
             github.com/nostalgicgarethdev/percolator-fork
           </a>
@@ -67,7 +66,7 @@ export default function SourcesPage() {
         <p>Both upstream licenses are Apache-2.0. The program crate metadata does not repeat the license field; the license file itself is Apache-2.0.</p>
         <p>
           The overview also shows a token mint,{" "}
-          <span className="font-mono text-[12px] break-all">EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump</span>
+          <span className="font-mono text-[12px] break-all text-foreground">EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump</span>
           . That account is a Token-2022 mint named Percolator v2, symbol Percolator. It is not the
           program id in this tree and it is not a deposit address.
         </p>
@@ -94,11 +93,11 @@ function SourceCard({
       href={href}
       target="_blank"
       rel="noreferrer"
-      className={`block px-4 py-5 hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none sm:px-8 ${className}`}
+      className={`glass block rounded-[28px] px-6 py-5 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none ${className}`}
     >
-      <p className="text-[10px] tracking-[0.18em] text-muted-foreground uppercase">{label}</p>
-      <p className="mt-2 text-[16px]">{name}</p>
-      <p className="mt-2 font-mono text-[11px] break-all text-primary">{pin}</p>
+      <p className="text-[12px] text-muted-foreground">{label}</p>
+      <p className="mt-2 text-[18px] tracking-[-0.03em]">{name}</p>
+      <p className="mt-3 font-mono text-[12px] break-all text-foreground/80">{pin}</p>
     </a>
   );
 }

@@ -1,35 +1,27 @@
 # PERC
 
-Public source: [github.com/nostalgicgarethdev/percolator-fork](https://github.com/nostalgicgarethdev/percolator-fork).
+A read-only perpetuals desk on Percolator.
 
-PERC is an independent perpetual-futures interface built on Anatoly Yakovenko's Percolator v16 risk engine. The website and the local session are original. The engine and the Solana wrapper are his Apache-2.0 code, pinned in [UPSTREAM.md](UPSTREAM.md).
+Live site: [percolator.beer](https://www.percolator.beer)
 
-`MANIFEST.txt` records sanitized snapshot `666c4fa72aae30555b12b9451b33637e19baf636` (942 source files, no snapshot Git history, no dependency installs). The commit that publishes this tree is a GitHub commit of that snapshot. It is not the same identifier as `666c4fa`.
+PERC is an independent interface. The website and the local session are original. The risk engine and the Solana wrapper are Anatoly Yakovenko's Apache-2.0 code, pinned in [UPSTREAM.md](UPSTREAM.md). This is not an official Percolator product, and it is not endorsed by Anatoly Yakovenko, Solana Labs, or the operators of percolator.trade. Upstream's warning stands: the engine is educational, unaudited, and not for production or real funds.
 
-This is not an official Percolator product, and it is not endorsed by Anatoly Yakovenko, Solana Labs, or the operators of percolator.trade. Upstream's own warning stands: the engine is educational, unaudited, and not for production or real funds.
+A perpetual is a contract for a long or a short on a price, with no expiry. The public host does not attach an engine, take deposits, or place trades. A matcher and a keeper are not running.
 
-A perpetual (perp) is a futures contract with no expiry. One side is long, the other is short, and funding nudges the contract toward a reference price. The risk engine decides whether a position is allowed. A Solana program would wrap that library. A matcher would agree a trade. A keeper would advance the market. None of those chain pieces are deployed from this tree.
+## Token
 
-## What is public
-
-The public site is read-only. It does not attach an engine, take deposits, or place trades.
-
-The overview shows one user-designated token mint:
+The overview shows one designated mint. It is not the trading program, not a treasury, and not a deposit address.
 
 `EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump`
 
-Read from Solana on 8 Nov 2026, slot 467026043: an initialized Token-2022 mint (`TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb`). On-chain name `Percolator v2`. On-chain symbol `Percolator`, not `PERC`. Decimals 6. Mint authority, freeze authority, and metadata update authority were null. Metadata `createdOn` is `https://pump.fun`. The create transaction (`Instruction: CreateV2` on pump.fun program `6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`) was signed by `CUNTsD6SU82A66jjfUgKQTvJx47SFDEGcaoJPChity7F`, which Solscan and pump.fun label as the creator. That is not a claim about who controls the keys.
+Read from Solana on 8 Nov 2026, slot 467026043: an initialized Token-2022 mint (`TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb`). On-chain name `Percolator v2`. On-chain symbol `Percolator`, not `PERC`. Decimals 6. Mint, freeze, and metadata update authorities were null. Metadata `createdOn` is `https://pump.fun`. The create transaction was signed by `CUNTsD6SU82A66jjfUgKQTvJx47SFDEGcaoJPChity7F`, which Solscan and pump.fun label as the creator. That is not a claim about who controls the keys.
 
-This address is not the Percolator program id declared in source (`Perco1ator111111111111111111111111111111111`), not a treasury, and not a deposit address. Showing it does not enable deposits or trading, and it is not an endorsement by Anatoly Yakovenko.
+- [Solscan](https://solscan.io/token/EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump)
+- [pump.fun](https://pump.fun/coin/EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump)
 
-- [Solscan token](https://solscan.io/token/EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump)
-- [pump.fun token](https://pump.fun/coin/EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump)
+`MANIFEST.txt` records sanitized snapshot `666c4fa72aae30555b12b9451b33637e19baf636`. That snapshot id is not this repository's Git commit.
 
-Verified fallback: [https://percolator-fork.vercel.app](https://percolator-fork.vercel.app)
-
-Custom domain: `percolator.beer` (apex redirects to `www`). Checked from this environment on 8 Nov 2026, `https://www.percolator.beer` returned HTTPS 200 and served the earlier production desk, deployment `dpl_FikX272D9MkkosV7rVqq9hm6hBRR`. The tabbed pages in the latest commit are not on that deployment yet.
-
-The name is a nod, not a claim about Percolator. Anatoly Yakovenko has described a four-in-the-morning idea after two coffees and a beer. That story is about Solana and Proof of History, in a [Cointelegraph interview](https://cointelegraph.com/interview/solana-genesis-story-powering-nasdaq-on-public-blockchain). It is not the origin of the Percolator engine, and it is not an endorsement of PERC.
+The name is a nod. Anatoly Yakovenko has described a four-in-the-morning idea after two coffees and a beer. That story is about Solana, in a [Cointelegraph interview](https://cointelegraph.com/interview/solana-genesis-story-powering-nasdaq-on-public-blockchain). It is not the origin of the Percolator engine, and it is not an endorsement of PERC.
 
 ## Architecture
 

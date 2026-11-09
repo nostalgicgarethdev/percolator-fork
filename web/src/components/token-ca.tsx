@@ -25,53 +25,40 @@ export function TokenCa() {
   }
 
   return (
-    <section className="border-b border-border px-4 py-6 sm:px-8" aria-labelledby="perc-token-heading">
-      <p className="text-[10px] font-medium tracking-[0.2em] text-muted-foreground uppercase">Token</p>
-      <h2 id="perc-token-heading" className="mt-2 text-[15px] font-medium text-primary">
-        PERC token CA
-      </h2>
-      <p className="mt-3 max-w-[44rem] text-[15px] leading-relaxed text-muted-foreground">
-        This is the mint address designated for this desk. On Solana it is an initialized Token-2022
-        mint named Percolator v2, symbol Percolator, with 6 decimals. The on-chain symbol is not PERC.
-        Mint, freeze, and metadata update authorities were empty when this page was written. It is not
-        the Percolator trading program, not a treasury, and not a deposit address. It does not turn on
-        trading or deposits here, and it is not an endorsement by Anatoly Yakovenko.
-      </p>
+    <section className="glass mt-12 rounded-[32px] px-6 py-7 sm:px-8" aria-labelledby="perc-token-heading">
+      <div className="flex flex-wrap items-baseline justify-between gap-3">
+        <p className="text-[13px] text-muted-foreground">Token mint</p>
+        <h2 id="perc-token-heading" className="text-[13px] text-muted-foreground">
+          Not a deposit address
+        </h2>
+      </div>
       <p
         ref={addressRef}
-        className="mt-4 max-w-full font-mono text-[13px] leading-relaxed break-all text-foreground"
+        className="mt-4 font-mono text-[clamp(1.05rem,2.4vw,1.7rem)] leading-snug tracking-[-0.04em] break-all"
       >
         {PERC_TOKEN_CA}
       </p>
-      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-        <button
-          type="button"
-          onClick={copyAddress}
-          className="inline-flex h-11 items-center justify-center border border-primary/50 px-4 text-[12px] tracking-[0.14em] text-foreground uppercase focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          Copy full address
+      <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
+        Designated mint for this desk. On Solana it is an initialized Token-2022 mint named
+        Percolator v2, symbol Percolator, with 6 decimals. The on-chain symbol is not PERC. Mint,
+        freeze, and metadata update authorities were empty when this page was written. It is not
+        the Percolator trading program, not a treasury, and not a deposit address.
+      </p>
+      <div className="mt-6 flex flex-wrap items-center gap-3">
+        <button type="button" onClick={copyAddress} className="glass-pill glass-solid text-[14px] font-medium">
+          Copy address
         </button>
-        <a
-          href={PERC_TOKEN_SOLSCAN}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex h-11 items-center text-[13px] text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          Solscan token
+        <a href={PERC_TOKEN_SOLSCAN} target="_blank" rel="noreferrer" className="glass-pill text-[14px]">
+          Solscan
         </a>
-        <a
-          href={PERC_TOKEN_PUMP}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex h-11 items-center text-[13px] text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
-        >
-          pump.fun token
+        <a href={PERC_TOKEN_PUMP} target="_blank" rel="noreferrer" className="glass-pill text-[14px]">
+          pump.fun
         </a>
       </div>
-      <p className="mt-3 min-h-5 text-[13px] text-foreground" role="status" aria-live="polite">
+      <p className="mt-4 min-h-5 text-[13px]" role="status" aria-live="polite">
         {message}
       </p>
-      <p className="max-w-[44rem] text-[13px] leading-relaxed text-muted-foreground">
+      <p className="max-w-3xl text-[13px] leading-relaxed text-muted-foreground">
         The create transaction was signed by{" "}
         <span className="font-mono text-[12px] break-all text-foreground">
           CUNTsD6SU82A66jjfUgKQTvJx47SFDEGcaoJPChity7F

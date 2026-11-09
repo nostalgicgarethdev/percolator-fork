@@ -12,7 +12,7 @@ const PIECES = [
     name: "Website",
     plain: "What you are reading, and the terminal.",
     detail:
-      "It draws the mark sheet and sends calls only to an engine on the same machine. On this host that call fails, and the page stays read-only.",
+      "It draws the desk and sends calls only to an engine on the same machine. On this host that call fails, and the page stays read-only.",
   },
   {
     name: "Risk engine",
@@ -42,46 +42,46 @@ const PIECES = [
 
 export default function HowItWorksPage() {
   return (
-    <main>
-      <header className="border-b border-border px-4 py-8 sm:px-8">
-        <p className="text-[10px] font-medium tracking-[0.2em] text-muted-foreground uppercase">How it works</p>
-        <h1 className="mt-2 max-w-[40rem] text-[clamp(1.7rem,4vw,2.4rem)] leading-tight">
+    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+      <header className="max-w-3xl">
+        <p className="text-[13px] text-muted-foreground">How it works</p>
+        <h1 className="mt-3 text-[clamp(2.4rem,5vw,4.2rem)] leading-[0.95] font-semibold tracking-[-0.05em]">
           The website is the only piece that is on.
         </h1>
-        <p className="mt-4 max-w-[42rem] text-[16px] leading-relaxed text-muted-foreground">
+        <p className="mt-5 text-[17px] leading-relaxed text-muted-foreground">
           PERC is the pages you are reading and the terminal. Under that sits Percolator, a risk
           engine that allows or rejects a position. A Solana program would put that engine on a
           chain. A matcher would agree a trade. A keeper would move the market forward. Those three
           are not running.
         </p>
-        <p className="mt-3 max-w-[42rem] text-[15px] leading-relaxed text-muted-foreground">
+        <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
           On a local machine the engine has been stepped through deposit, open, funding,
           settlement, close, withdraw, a few rejections, and one liquidation. Sixteen steps, on
           example numbers. That is not a public market.
         </p>
       </header>
-      <ol>
+      <ol className="mt-10 grid gap-4">
         {PIECES.map((piece, index) => (
-          <li key={piece.name} className="grid gap-2 border-b border-border px-4 py-5 sm:grid-cols-[8rem_minmax(0,1fr)] sm:px-8">
-            <p className="font-mono text-[12px] text-primary">{String(index + 1).padStart(2, "0")}</p>
+          <li key={piece.name} className="glass grid gap-3 rounded-[28px] px-6 py-5 sm:grid-cols-[4.5rem_minmax(0,1fr)]">
+            <p className="font-mono text-[13px] text-muted-foreground">{String(index + 1).padStart(2, "0")}</p>
             <div>
-              <h2 className="text-[16px] font-medium">{piece.name}</h2>
+              <h2 className="text-[18px] font-medium tracking-[-0.03em]">{piece.name}</h2>
               <p className="mt-1 text-[15px]">{piece.plain}</p>
-              <p className="mt-2 max-w-[46rem] text-[14px] leading-relaxed text-muted-foreground">{piece.detail}</p>
+              <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-muted-foreground">{piece.detail}</p>
             </div>
           </li>
         ))}
       </ol>
-      <section className="px-4 py-8 sm:px-8">
-        <h2 className="text-[10px] font-medium tracking-[0.2em] uppercase">The name, again</h2>
-        <p className="mt-3 max-w-[44rem] text-[15px] leading-relaxed text-muted-foreground">
+      <section className="glass mt-4 rounded-[28px] px-6 py-6">
+        <h2 className="text-[18px] font-medium tracking-[-0.03em]">The name</h2>
+        <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
           Two coffees and a beer at four in the morning is how Anatoly Yakovenko has described the
           idea behind Solana. It is not the origin of Percolator. The domain is a nod to that
           sentence. It is not an endorsement of this desk.
         </p>
         <p className="mt-6">
-          <Link href="/terminal" className="text-[13px] tracking-[0.08em] text-primary uppercase hover:underline">
-            Open the terminal
+          <Link href="/terminal" className="glass-pill glass-solid text-[14px] font-medium">
+            Open terminal
           </Link>
         </p>
       </section>
