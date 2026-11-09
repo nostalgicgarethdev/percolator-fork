@@ -14,6 +14,17 @@ A perpetual (perp) is a futures contract with no expiry. One side is long, the o
 
 The public site is read-only. It does not attach an engine, take deposits, or place trades.
 
+The overview shows one user-designated token mint:
+
+`EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump`
+
+Read from Solana on 8 Nov 2026, slot 467026043: an initialized Token-2022 mint (`TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb`). On-chain name `Percolator v2`. On-chain symbol `Percolator`, not `PERC`. Decimals 6. Mint authority, freeze authority, and metadata update authority were null. Metadata `createdOn` is `https://pump.fun`. The create transaction (`Instruction: CreateV2` on pump.fun program `6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`) was signed by `CUNTsD6SU82A66jjfUgKQTvJx47SFDEGcaoJPChity7F`, which Solscan and pump.fun label as the creator. That is not a claim about who controls the keys.
+
+This address is not the Percolator program id declared in source (`Perco1ator111111111111111111111111111111111`), not a treasury, and not a deposit address. Showing it does not enable deposits or trading, and it is not an endorsement by Anatoly Yakovenko.
+
+- [Solscan token](https://solscan.io/token/EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump)
+- [pump.fun token](https://pump.fun/coin/EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump)
+
 Verified fallback: [https://percolator-fork.vercel.app](https://percolator-fork.vercel.app)
 
 Custom domain: `percolator.beer` (apex redirects to `www`). Checked from this environment on 8 Nov 2026, `https://www.percolator.beer` returned HTTPS 200 and served the earlier production desk, deployment `dpl_FikX272D9MkkosV7rVqq9hm6hBRR`. The tabbed pages in the latest commit are not on that deployment yet.

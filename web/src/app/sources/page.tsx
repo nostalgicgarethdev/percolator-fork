@@ -65,6 +65,12 @@ export default function SourcesPage() {
           matcher, or a keeper.
         </p>
         <p>Both upstream licenses are Apache-2.0. The program crate metadata does not repeat the license field; the license file itself is Apache-2.0.</p>
+        <p>
+          The overview also shows a token mint,{" "}
+          <span className="font-mono text-[12px] break-all">EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump</span>
+          . That account is a Token-2022 mint named Percolator v2, symbol Percolator. It is not the
+          program id in this tree and it is not a deposit address.
+        </p>
       </section>
     </main>
   );

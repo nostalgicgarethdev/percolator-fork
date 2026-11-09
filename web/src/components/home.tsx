@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TokenCa } from "@/components/token-ca";
 
 export function Home() {
   return (
@@ -43,6 +44,8 @@ export function Home() {
           <path d="M28 100H172" stroke="var(--primary)" strokeWidth="1.6" />
         </svg>
       </section>
+
+      <TokenCa />
 
       <section className="grid border-b border-border md:grid-cols-2" aria-label="What is available">
         <div className="border-b border-primary/40 px-4 py-6 sm:px-8 md:border-r md:border-b-0">
