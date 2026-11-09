@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Ca } from "@/components/ca";
 import { Enter } from "@/components/enter";
 import { Mark } from "@/components/mark";
 
@@ -62,6 +63,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <span className="hidden text-[13px] text-muted-foreground sm:inline">Read only</span>
           </div>
         </header>
+        <Ca />
         <div id="content">{children}</div>
       </Enter>
     </div>
