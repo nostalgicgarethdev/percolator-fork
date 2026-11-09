@@ -8,17 +8,6 @@ PERC is an independent interface. The website and the local session are original
 
 A perpetual is a contract for a long or a short on a price, with no expiry. The public host does not attach an engine, take deposits, or place trades. A matcher and a keeper are not running.
 
-## Token
-
-The overview shows one designated mint. It is not the trading program, not a treasury, and not a deposit address.
-
-`EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump`
-
-Read from Solana on 8 Nov 2026, slot 467026043: an initialized Token-2022 mint (`TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb`). On-chain name `Percolator v2`. On-chain symbol `Percolator`, not `PERC`. Decimals 6. Mint, freeze, and metadata update authorities were null. Metadata `createdOn` is `https://pump.fun`. The create transaction was signed by `CUNTsD6SU82A66jjfUgKQTvJx47SFDEGcaoJPChity7F`, which Solscan and pump.fun label as the creator. That is not a claim about who controls the keys.
-
-- [Solscan](https://solscan.io/token/EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump)
-- [pump.fun](https://pump.fun/coin/EkNJH54jo23bPa45bY1WDDy4Qvg2CjAJjjEWqgbypump)
-
 `MANIFEST.txt` records sanitized snapshot `666c4fa72aae30555b12b9451b33637e19baf636`. That snapshot id is not this repository's Git commit.
 
 The name is a nod. Anatoly Yakovenko has described a four-in-the-morning idea after two coffees and a beer. That story is about Solana, in a [Cointelegraph interview](https://cointelegraph.com/interview/solana-genesis-story-powering-nasdaq-on-public-blockchain). It is not the origin of the Percolator engine, and it is not an endorsement of PERC.
@@ -51,7 +40,7 @@ cd web && npm install && npm run dev
 - Site: http://127.0.0.1:43123
 - Terminal: http://127.0.0.1:43123/terminal
 
-Routes: `/` Overview, `/how-it-works`, `/sources`, `/terminal`. If the engine process is down, the terminal stays disconnected and read-only. Actions stay off. The first visit shows a short branded entrance; it does not pretend a market is connecting.
+Routes: `/` Overview, `/how-it-works`, `/sources`, `/terminal`. If the engine process is down, the terminal stays disconnected and read-only. Actions stay off. The sheet does not invent a price.
 
 ```bash
 scripts/lifecycle.sh

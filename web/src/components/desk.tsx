@@ -94,9 +94,9 @@ export function Desk() {
   const quietDisconnect =
     !!error && /not reachable|did not respond|connection dropped/i.test(error);
   const lockText = phase === "checking"
-    ? "Checking whether a local engine is attached."
+    ? "Checking whether a local engine is attached. Buttons stay off until it answers."
     : !connected
-    ? "Read-only until a local engine is attached. This host takes no deposits."
+    ? "Buttons stay off. This host has no engine, so it cannot take a deposit or place a trade."
     : busy
       ? "Waiting for the engine."
       : "Each call hits the vendored v16 engine in this process. A rejection rolls the session back.";
@@ -124,6 +124,26 @@ export function Desk() {
         </div>
         <StatusRail phase={phase} />
       </header>
+
+      {phase !== "attached" ? (
+        <section className="glass mt-4 rounded-[28px] px-5 py-5" aria-labelledby="desk-guide">
+          <h2 id="desk-guide" className="text-[16px] font-medium tracking-[-0.03em]">
+            {phase === "checking" ? "Looking for a local engine." : "This terminal is blank on purpose."}
+          </h2>
+          <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-muted-foreground">
+            {phase === "checking"
+              ? "If nothing answers, the sheet stays empty. That empty sheet is not a price."
+              : "This host does not run an engine. There is no live price, no deposit, and no trade. Open, funding, and close only work after you start the engine on your own computer, and even then the numbers are examples in memory."}
+          </p>
+          {phase === "disconnected" ? (
+            <p className="mt-3 text-[14px]">
+              <Link href="/how-it-works" className="underline-offset-2 hover:underline">
+                See what each piece does
+              </Link>
+            </p>
+          ) : null}
+        </section>
+      ) : null}
 
       <div role="status" aria-live="polite" aria-atomic="true">
         {error && !quietDisconnect ? (
@@ -256,11 +276,11 @@ function MarkSheet({
   className?: string;
 }) {
   const mark = state ? groupInteger(String(state.market.effective_price)) : null;
-  const quiet = phase === "checking" ? "Checking." : "No print.";
+  const quiet = phase === "checking" ? "Checking." : "Blank.";
   const quietNote =
     phase === "checking"
       ? "Looking for a local engine. This is not a price."
-      : "The sheet stays blank until the local engine reports an example mark. Nothing here is a price.";
+      : "No engine is attached, so there is no mark. The sheet does not invent one.";
   return (
     <section
       aria-labelledby="mark-sheet-title"
@@ -275,7 +295,7 @@ function MarkSheet({
           Mark sheet
         </h2>
         <p className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground uppercase">
-          {mark ? "Example mark" : phase === "checking" ? "Checking" : "No print"}
+          {mark ? "Example mark" : phase === "checking" ? "Checking" : "Blank"}
         </p>
       </div>
       <div className="flex min-h-[148px] flex-col items-center justify-center px-6 py-6 text-center sm:min-h-[168px]">

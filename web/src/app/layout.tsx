@@ -25,10 +25,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.percolator.beer"),
   title: "PERC — independent perpetuals desk",
   description:
-    "PERC is an independent perpetual-futures interface built on Percolator. Read-only on this host. Not an official product.",
+    "See how a perpetual desk is put together. This host is read-only: no engine, no deposits, no public trading.",
   openGraph: {
     title: "PERC",
-    description: "An independent perpetual-futures interface built on Percolator. Read-only. No deposits.",
+    description: "A read-only look at a perpetual desk. No deposits and no public trading on this host.",
     images: ["/brand/perc-square-1024.png"],
   },
 };
@@ -44,11 +44,6 @@ export default function RootLayout({
       className={`dark ${sans.variable} ${serif.variable} ${plex.variable}`}
     >
       <body className="min-h-dvh antialiased">
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `try{if(sessionStorage.getItem("perc-entered")==="1")document.documentElement.dataset.entered="1"}catch(e){document.documentElement.dataset.entered="1"}`,
-          }}
-        />
         <Shell>{children}</Shell>
       </body>
     </html>

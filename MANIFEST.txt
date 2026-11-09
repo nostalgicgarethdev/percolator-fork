@@ -15,4 +15,4 @@ Build the local engine session from the repository root:
 
 Licenses are Apache-2.0. engine/LICENSE and program/LICENSE are the upstream license files.
 SHA256SUMS lists every source file in this snapshot, not this manifest.
-The published GitHub tree adds the public repository URL, the designated token mint on the overview, and the notes in README.md. SHA256SUMS matches this published tree, including those later edits. Files not listed in the original snapshot note were added for publication. The snapshot id above is not this repository's Git commit.
+The published GitHub tree adds the public repository URL and the notes in README.md. SHA256SUMS matches this published tree, including those later edits. Files not listed in the original snapshot note were added for publication. The snapshot id above is not this repository's Git commit.
