@@ -43,6 +43,12 @@ export default function RootLayout({
       className={`dark ${sans.variable} ${serif.variable} ${plex.variable}`}
     >
       <body className="min-h-dvh antialiased">
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{if(sessionStorage.getItem('perc-entered')==='1')document.documentElement.dataset.entered='1'}catch(e){}",
+          }}
+        />
         <Shell>{children}</Shell>
       </body>
     </html>
