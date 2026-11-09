@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Mono, Instrument_Sans, Instrument_Serif } from "next/font/google";
-import { Closed } from "@/components/closed";
+import { Shell } from "@/components/shell";
 import "./globals.css";
 
 const sans = Instrument_Sans({
@@ -23,12 +23,12 @@ const plex = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.percolator.beer"),
-  title: "PERC is closed",
-  description: "PERC is closed for now. The desk is off while it gets worked on.",
-  robots: { index: false, follow: false },
+  title: "PERC — independent perpetuals desk",
+  description:
+    "See how a perpetual desk is put together. This host is read-only: no engine, no deposits, no public trading.",
   openGraph: {
-    title: "PERC is closed",
-    description: "Closed for now. The desk is off while it gets worked on.",
+    title: "PERC",
+    description: "A read-only look at a perpetual desk. No deposits and no public trading on this host.",
     images: ["/brand/perc-square-1024.png"],
   },
 };
@@ -38,14 +38,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  void children;
   return (
     <html
       lang="en"
       className={`dark ${sans.variable} ${serif.variable} ${plex.variable}`}
     >
       <body className="min-h-dvh antialiased">
-        <Closed />
+        <Shell>{children}</Shell>
       </body>
     </html>
   );

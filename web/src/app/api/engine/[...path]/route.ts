@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-const CLOSED = true;
 const BASE = process.env.FORK_ENGINE_URL ?? "http://127.0.0.1:43124";
 
 async function proxy(request: NextRequest, path: string[]) {
@@ -41,18 +40,12 @@ async function proxy(request: NextRequest, path: string[]) {
 
 type Context = { params: Promise<{ path: string[] }> };
 
-function closed() {
-  return NextResponse.json({ error: "PERC is closed for now." }, { status: 503 });
-}
-
 export async function GET(request: NextRequest, context: Context) {
-  if (CLOSED) return closed();
   const { path } = await context.params;
   return proxy(request, path);
 }
 
 export async function POST(request: NextRequest, context: Context) {
-  if (CLOSED) return closed();
   const { path } = await context.params;
   return proxy(request, path);
 }

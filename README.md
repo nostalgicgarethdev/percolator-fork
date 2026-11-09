@@ -2,7 +2,7 @@
 
 A read-only perpetuals desk on Percolator.
 
-The public site is closed for now: [percolator.beer](https://www.percolator.beer)
+Live site: [percolator.beer](https://www.percolator.beer)
 
 PERC is an independent interface. The website and the local session are original. The risk engine and the Solana wrapper are Anatoly Yakovenko's Apache-2.0 code, pinned in [UPSTREAM.md](UPSTREAM.md). This is not an official Percolator product, and it is not endorsed by Anatoly Yakovenko, Solana Labs, or the operators of percolator.trade. Upstream's warning stands: the engine is educational, unaudited, and not for production or real funds.
 
