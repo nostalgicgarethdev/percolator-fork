@@ -215,3 +215,42 @@
 html[data-entered="1"] .enter-screen {
   display: none;
 }
+
+.perc-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 28px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.perc-range::-webkit-slider-runnable-track {
+  height: 3px;
+  background: oklch(1 0 0 / 22%);
+  border-radius: 999px;
+}
+
+.perc-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  margin-top: -8px;
+  border-radius: 999px;
+  background: #f4f7f8;
+  box-shadow: 0 0 0 4px oklch(0.13 0.02 255 / 80%);
+}
+
+.perc-range::-moz-range-track {
+  height: 3px;
+  background: oklch(1 0 0 / 22%);
+  border-radius: 999px;
+}
+
+.perc-range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 0;
+  border-radius: 999px;
+  background: #f4f7f8;
+}
