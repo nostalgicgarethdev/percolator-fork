@@ -78,7 +78,7 @@ export function Machine({ attempt, applied, anchor, blocked, assetId, wells, onA
     <div className="relative mx-auto w-full">
       <canvas
         ref={canvasRef}
-        className="block h-[min(48vh,460px)] min-h-[340px] w-full touch-none"
+        className="block h-[min(52vh,520px)] min-h-[380px] w-full touch-none lg:h-[min(64vh,600px)] lg:min-h-[480px]"
         aria-hidden="true"
       />
       <div className="pointer-events-none absolute inset-0" role="listbox" aria-label="Assets in the account">
@@ -115,7 +115,7 @@ export function Machine({ attempt, applied, anchor, blocked, assetId, wells, onA
           pausedRef.current = !pausedRef.current;
           setPaused(pausedRef.current);
         }}
-        className="absolute right-1 bottom-1 grid size-8 place-items-center text-white/40 hover:text-white focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+        className="absolute right-2 bottom-2 grid size-9 place-items-center rounded-full border border-white/15 bg-black/30 text-white/55 backdrop-blur-md hover:text-white focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
       >
         {paused ? (
           <span className="ml-0.5 border-y-[5px] border-l-8 border-y-transparent border-l-current" />
@@ -149,11 +149,11 @@ function mount(
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(28, 1, 0.1, 40);
-  camera.position.set(0.55, 2.85, 8.1);
+  const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 40);
+  camera.position.set(0.1, 2.85, 8.8);
 
   const controls = new OrbitControlsCtor(camera, canvas);
-  controls.target.set(0, 1.05, 0);
+  controls.target.set(0, 1.02, 0.02);
   controls.enablePan = false;
   controls.enableZoom = false;
   controls.enableDamping = !reduce;
@@ -161,10 +161,10 @@ function mount(
   controls.rotateSpeed = 0.55;
   controls.autoRotate = false;
   controls.autoRotateSpeed = 0.35;
-  controls.minPolarAngle = 0.85;
-  controls.maxPolarAngle = 1.28;
-  controls.minAzimuthAngle = -0.85;
-  controls.maxAzimuthAngle = 0.85;
+  controls.minPolarAngle = 0.95;
+  controls.maxPolarAngle = 1.34;
+  controls.minAzimuthAngle = -0.7;
+  controls.maxAzimuthAngle = 0.7;
 
   scene.add(new THREE.AmbientLight(0xc8c2d8, 0.55));
   const key = new THREE.DirectionalLight(0xfff4ea, 2.4);
@@ -198,7 +198,7 @@ function mount(
 
   const plinth = new THREE.Mesh(
     new THREE.CylinderGeometry(2.45, 2.52, 0.28, 80),
-    new THREE.MeshStandardMaterial({ color: 0x14121a, metalness: 0.72, roughness: 0.32 }),
+    new THREE.MeshStandardMaterial({ color: 0x121018, metalness: 0.9, roughness: 0.18 }),
   );
   plinth.position.y = 0.16;
   plinth.receiveShadow = true;
@@ -254,14 +254,17 @@ function mount(
   scene.add(heatHit);
 
   const glassMat = new THREE.MeshPhysicalMaterial({
-    color: 0xffffff,
+    color: 0xe7eef4,
     transparent: true,
-    opacity: 0.16,
-    roughness: 0.04,
+    opacity: 0.3,
+    roughness: 0.05,
     metalness: 0,
-    transmission: 0.35,
-    thickness: 0.2,
-    envMapIntensity: 1.3,
+    transmission: 0.62,
+    thickness: 0.45,
+    ior: 1.45,
+    envMapIntensity: 1.8,
+    clearcoat: 1,
+    clearcoatRoughness: 0.12,
     depthWrite: false,
     side: THREE.DoubleSide,
   });
@@ -594,10 +597,10 @@ function makeEnv(THREE: typeof import("three"), renderer: import("three").WebGLR
     mesh.lookAt(0, 1.2, 0);
     room.add(mesh);
   };
-  panel(0x4a2a86, 0, 7, -1);
-  panel(0xe7e4f2, 0, 2, 8);
-  panel(0x14664c, -7, 2, 1);
-  panel(0x3a185c, 7, 3, 0);
+  panel(0x6a3cb0, 0, 8, -2);
+  panel(0xf7f4ee, 0, 2.2, 8);
+  panel(0x1a8f68, -8, 2.4, 2);
+  panel(0x5a2d86, 8, 3.2, 0);
   panel(0x0c0b10, 0, -2, 0);
   const pmrem = new THREE.PMREMGenerator(renderer);
   const target = pmrem.fromScene(room, 0.04);

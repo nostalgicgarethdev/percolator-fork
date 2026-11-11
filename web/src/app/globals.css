@@ -130,7 +130,11 @@
   body {
     @apply text-foreground overflow-x-clip antialiased;
     font-feature-settings: "kern" 1;
-    background: #07060b;
+    background-color: #07060b;
+    background-image:
+      radial-gradient(ellipse 70% 48% at 74% 38%, oklch(0.34 0.045 230 / 32%), transparent 62%),
+      radial-gradient(ellipse 46% 36% at 12% 100%, oklch(0.22 0.03 265 / 45%), transparent 58%);
+    background-attachment: fixed;
   }
   ::selection {
     background: oklch(0.86 0.05 200 / 40%);
@@ -218,6 +222,35 @@ html[data-entered="1"] .enter-screen {
 
 .enter-screen {
   background: #07060b;
+  transition: opacity 0.45s ease;
+}
+
+.enter-screen[data-leaving="1"] {
+  opacity: 0;
+}
+
+.enter-mark {
+  animation: perc-mark 1.15s ease both;
+}
+
+@keyframes perc-mark {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .enter-screen {
+    transition: none;
+  }
+  .enter-mark {
+    animation: none;
+  }
 }
 
 .perc-range {

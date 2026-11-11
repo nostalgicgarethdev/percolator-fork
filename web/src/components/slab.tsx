@@ -7,7 +7,7 @@ import type { Well } from "@/components/machine";
 
 const Machine = dynamic(() => import("@/components/machine").then((mod) => mod.Machine), {
   ssr: false,
-  loading: () => <div className="h-[min(48vh,460px)] min-h-[340px]" />,
+  loading: () => <div className="h-[min(52vh,520px)] min-h-[380px] lg:h-[min(64vh,600px)] lg:min-h-[480px]" />,
 });
 
 const ENTRY = 100;
@@ -78,124 +78,181 @@ export function Slab() {
     setAssetId("88");
   }
 
+  const selected = wells.find((well) => well.id === assetId) ?? wells[2];
+
   return (
     <div>
-      <header className="max-w-xl px-1 pt-8 pb-4 sm:pt-10">
-        <h1 className="font-serif text-[clamp(2rem,4vw,2.65rem)] leading-[1.05] tracking-[-0.035em]">
-          One market is one slab.
-        </h1>
-        <p className="mt-3 text-[15px] leading-relaxed text-foreground/75">
-          A trade reads only the book of the trader who sent it. Insurance stays in its well.
-        </p>
-      </header>
-      <label className="sr-only" htmlFor="perc-mark">
-        Example mark
-      </label>
-      <input
-        id="perc-mark"
-        className="sr-only"
-        type="range"
-        min={MARK_MIN}
-        max={MARK_MAX}
-        step={1}
-        value={attempt}
-        aria-valuetext={blocked ? `${attempt}, holds ${applied}` : String(attempt)}
-        onChange={(event) => setAttempt(Number(event.target.value))}
-      />
-      <Machine
-        attempt={attempt}
-        applied={applied}
-        anchor={anchor}
-        blocked={blocked}
-        assetId={assetId}
-        wells={wells}
-        onAttempt={setAttempt}
-        onSelect={(id) => setAssetId(id as AssetId)}
-      />
+      <div className="grid lg:min-h-[calc(100dvh-4.5rem)] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:grid-rows-[auto_1fr] lg:items-center">
+        <header className="order-1 px-1 pt-8 lg:col-start-1 lg:row-start-1 lg:pt-10 lg:pr-8">
+          <h1 className="font-serif text-[clamp(3rem,5.4vw,4.7rem)] leading-[0.9] tracking-[-0.045em]">
+            One market
+            <br />
+            is one slab.
+          </h1>
+          <p className="mt-5 max-w-sm text-[16px] leading-relaxed text-white/70">
+            A trade reads only the book of the trader who sent it. Insurance stays in its well.
+          </p>
+        </header>
 
-      <p
-        className={`mt-2 text-center font-serif text-[clamp(4.4rem,12vw,6.6rem)] leading-none tracking-[-0.05em] ${
-          blocked ? "text-[#9945FF]" : "text-foreground"
-        }`}
-      >
-        {attempt.toFixed(0)}
-      </p>
-      <p className="mt-2 text-center text-[13px] text-muted-foreground">mark</p>
-      <p className="mt-5 text-center text-[15px] text-foreground/80">{status}</p>
-      <p className="mt-3 text-center text-[15px] text-muted-foreground">
-        {blocked
-          ? `Book holds at ${applied.toFixed(0)}.`
-          : flat
-            ? "Insurance is sitting in each well."
-            : "The loser pays first. Then that well."}
-      </p>
-
-      {flat ? null : (
-        <div className="mx-auto mt-10 grid max-w-xl grid-cols-2">
-          <Side
-            name="Long"
-            align="right"
-            winning={book.longWins}
-            paid={book.paid}
-            cut={book.cut}
-            loss={book.shortWins ? book.fromLoser : 0}
+        <div className="relative order-2 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-x-[12%] bottom-[14%] h-28 rounded-full bg-[radial-gradient(closest-side,oklch(0.72_0.04_200/16%),transparent)]"
           />
-          <Side
-            name="Short"
-            align="left"
-            winning={book.shortWins}
-            paid={book.paid}
-            cut={book.cut}
-            loss={book.longWins ? book.fromLoser : 0}
+          <label className="sr-only" htmlFor="perc-mark">
+            Example mark
+          </label>
+          <input
+            id="perc-mark"
+            className="sr-only"
+            type="range"
+            min={MARK_MIN}
+            max={MARK_MAX}
+            step={1}
+            value={attempt}
+            aria-valuetext={blocked ? `${attempt}, holds ${applied}` : String(attempt)}
+            onChange={(event) => setAttempt(Number(event.target.value))}
+          />
+          <Machine
+            attempt={attempt}
+            applied={applied}
+            anchor={anchor}
+            blocked={blocked}
+            assetId={assetId}
+            wells={wells}
+            onAttempt={setAttempt}
+            onSelect={(id) => setAssetId(id as AssetId)}
           />
         </div>
-      )}
 
-      <div className="mx-auto mt-12 flex max-w-md flex-wrap items-center justify-between gap-4">
-        <div className="flex items-baseline gap-5">
-          <button
-            type="button"
-            onClick={crank}
-            className="inline-flex h-12 min-w-28 cursor-pointer items-center justify-center border border-white/30 px-6 text-[15px] text-white touch-manipulation hover:bg-white hover:text-[#07060b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:bg-white active:text-[#07060b]"
+        <div className="order-3 px-1 pt-2 pb-4 lg:col-start-1 lg:row-start-2 lg:self-end lg:pr-8 lg:pb-10">
+          <p
+            className={`font-serif text-[clamp(5.2rem,11vw,7.6rem)] leading-none tracking-[-0.06em] ${
+              blocked ? "text-[#9945FF]" : "text-foreground"
+            }`}
           >
-            Crank
-          </button>
-          <button
-            type="button"
-            onClick={reset}
-            className="text-[14px] text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
-          >
-            Reset
-          </button>
-        </div>
-        <div className="flex items-center gap-4">
-          <button
-            type="button"
-            className="text-[18px] text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
-            onClick={() => setLots((n) => Math.max(1, n - 1))}
-            aria-label="Fewer lots"
-          >
-            −
-          </button>
-          <p className="min-w-14 text-center text-[14px] tabular-nums">{lots} lots</p>
-          <button
-            type="button"
-            className="text-[18px] text-muted-foreground hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
-            onClick={() => setLots((n) => Math.min(12, n + 1))}
-            aria-label="More lots"
-          >
-            +
-          </button>
+            {attempt.toFixed(0)}
+          </p>
+          <p className="mt-2 text-[13px] text-white/40">mark</p>
+          <p className="mt-5 text-[16px] text-foreground/85" aria-live="polite">
+            {status}
+          </p>
+          <p className="mt-1 text-[15px] text-white/50">
+            {blocked
+              ? `Book holds at ${applied.toFixed(0)}.`
+              : flat
+                ? "Insurance is sitting in each well."
+                : "The loser pays first. Then that well."}
+          </p>
+
+          {flat ? null : (
+            <div className="mt-8 grid max-w-md grid-cols-2">
+              <Side
+                name="Long"
+                align="right"
+                winning={book.longWins}
+                paid={book.paid}
+                cut={book.cut}
+                loss={book.shortWins ? book.fromLoser : 0}
+              />
+              <Side
+                name="Short"
+                align="left"
+                winning={book.shortWins}
+                paid={book.paid}
+                cut={book.cut}
+                loss={book.longWins ? book.fromLoser : 0}
+              />
+            </div>
+          )}
+
+          <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+            <div className="flex items-center gap-5">
+              <button
+                type="button"
+                onClick={crank}
+                className="inline-flex h-12 min-w-28 cursor-pointer items-center justify-center border border-white/35 px-6 text-[15px] text-white touch-manipulation hover:bg-white hover:text-[#07060b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white active:bg-white active:text-[#07060b]"
+              >
+                Crank
+              </button>
+              <button
+                type="button"
+                onClick={reset}
+                className="text-[14px] text-white/45 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+              >
+                Reset
+              </button>
+            </div>
+            <div className="flex items-center gap-1 sm:ml-auto">
+              <button
+                type="button"
+                className="grid size-11 place-items-center text-[18px] text-white/55 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+                onClick={() => setLots((n) => Math.max(1, n - 1))}
+                aria-label="Fewer lots"
+              >
+                −
+              </button>
+              <p className="min-w-16 text-center text-[14px] tabular-nums">{lots} lots</p>
+              <button
+                type="button"
+                className="grid size-11 place-items-center text-[18px] text-white/55 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+                onClick={() => setLots((n) => Math.min(12, n + 1))}
+                aria-label="More lots"
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <p className="mt-8 max-w-sm text-[13px] leading-relaxed text-white/40">
+            Example atoms. This host takes nothing.{" "}
+            <Link href="/terminal" className="text-foreground/80 underline-offset-2 hover:underline">
+              The terminal runs an example session.
+            </Link>
+          </p>
         </div>
       </div>
-      <p className="mt-16 max-w-xl text-[13px] leading-relaxed text-muted-foreground">
-        Example atoms. Independent, not the official engine. This host takes nothing.{" "}
-        <Link href="/terminal" className="text-foreground underline-offset-2 hover:underline">
-          The terminal runs an example session.
-        </Link>
-      </p>
+
+      <section className="mt-6 border-t border-white/10 px-1 pt-14 pb-4" aria-labelledby="wells-title">
+        <h2
+          id="wells-title"
+          className="max-w-xl font-serif text-[clamp(2.4rem,5vw,3.8rem)] leading-[0.95] tracking-[-0.04em]"
+        >
+          Each well pays only itself.
+        </h2>
+        <p className="mt-6 max-w-lg text-[18px] leading-relaxed text-white/75">{wellLine(selected)}</p>
+        <div className="mt-8 flex flex-wrap gap-x-8 gap-y-3" role="group" aria-label="Choose a well">
+          {ASSETS.map((item) => {
+            const on = item.id === assetId;
+            return (
+              <button
+                key={item.id}
+                type="button"
+                aria-pressed={on}
+                onClick={() => setAssetId(item.id)}
+                className={`border-b pb-1 font-serif text-[clamp(1.8rem,3vw,2.5rem)] leading-none tracking-[-0.04em] focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none ${
+                  on ? "border-white text-foreground" : "border-transparent text-white/35 hover:text-white/70"
+                }`}
+              >
+                {item.label}
+              </button>
+            );
+          })}
+        </div>
+      </section>
     </div>
   );
+}
+
+function wellLine(well: Well) {
+  if (well.win === 0) {
+    if (well.insurance === 0) return "402 is dry. A win here is cut.";
+    if (well.id === "0") return "BASE is holding a hundred thousand.";
+    if (well.id === "14") return "14 is holding twenty thousand.";
+    return "88 is holding five thousand.";
+  }
+  if (well.cut === 0) return `${well.label} pays the whole win.`;
+  if (well.insurance === 0) return "Nothing in the well. The win is cut.";
+  return `${well.label} pays ${atoms(well.paid)}. The rest is cut.`;
 }
 
 function Side({

@@ -43,6 +43,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`dark ${sans.variable} ${serif.variable} ${plex.variable}`}
+      suppressHydrationWarning
     >
       <body className="min-h-dvh antialiased">
         <script

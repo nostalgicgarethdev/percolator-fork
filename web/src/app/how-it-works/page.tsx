@@ -49,7 +49,7 @@ const PIECES = [
     name: "Matcher",
     plain: "The piece that would agree two sides of a trade.",
     detail:
-      "The wrapper's source describes a matcher. PERC does not run one, and the terminal's counterparty is only an example account inside a local process.",
+      "The wrapper source describes a matcher. PERC does not run one, and the terminal counterparty is only an example account inside a local process.",
   },
   {
     name: "Keeper",
@@ -61,79 +61,100 @@ const PIECES = [
 
 export default function HowItWorksPage() {
   return (
-    <main className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+    <main className="mx-auto w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
       <header className="max-w-3xl">
-        <p className="text-[13px] text-muted-foreground">How it works</p>
-        <h1 className="mt-3 text-[clamp(2.4rem,5vw,4.2rem)] leading-[0.95] font-semibold tracking-[-0.05em]">
+        <p className="font-mono text-[12px] tracking-[0.18em] text-white/40 uppercase">How it works</p>
+        <h1 className="mt-4 font-serif text-[clamp(2.8rem,6vw,5rem)] leading-[0.92] tracking-[-0.045em]">
           The website is the only piece that is on.
         </h1>
-        <p className="mt-5 text-[17px] leading-relaxed text-muted-foreground">
+        <p className="mt-6 max-w-2xl text-[18px] leading-relaxed text-white/70">
           PERC is the pages you are reading and the terminal. Under that sits Percolator, a risk
           engine that allows or rejects a position. A Solana program would put that engine on a
           chain. A matcher would agree a trade. A keeper would move the market forward. Those three
           are not running.
         </p>
-        <p className="mt-3 text-[15px] leading-relaxed text-muted-foreground">
+        <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-white/50">
           On a local machine the engine has been stepped through deposit, open, funding,
           settlement, close, withdraw, a few rejections, and one liquidation. Sixteen steps, on
           example numbers. That is not a public market.
         </p>
       </header>
-      <section className="mt-10" aria-labelledby="session-title">
-        <h2 id="session-title" className="text-[18px] font-medium tracking-[-0.03em]">
+
+      <section className="mt-16" aria-labelledby="session-title">
+        <h2 id="session-title" className="font-serif text-[clamp(2rem,4vw,3rem)] leading-none tracking-[-0.04em]">
           What a local session does
         </h2>
-        <p className="mt-2 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
+        <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-white/55">
           On your own machine those four steps can run against example numbers. On this host they
           do not start.
         </p>
-        <ol className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-8 divide-y divide-white/10 border-y border-white/10">
           {SESSION.map((step, index) => (
-            <li key={step.name} className="glass rounded-[28px] px-5 py-5">
-              <p className="font-mono text-[12px] text-muted-foreground">{String(index + 1).padStart(2, "0")}</p>
-              <h3 className="mt-3 text-[16px] font-medium tracking-[-0.03em]">{step.name}</h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-muted-foreground">{step.body}</p>
+            <li key={step.name} className="grid gap-3 py-8 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:items-baseline sm:gap-8">
+              <p className="font-mono text-[12px] text-white/35">{String(index + 1).padStart(2, "0")}</p>
+              <div>
+                <h3 className="font-serif text-[clamp(1.8rem,3vw,2.6rem)] leading-none tracking-[-0.04em]">
+                  {step.name}
+                </h3>
+                <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-white/60">{step.body}</p>
+              </div>
             </li>
           ))}
         </ol>
       </section>
-      <section className="glass mt-4 rounded-[28px] px-6 py-6">
-        <h2 className="text-[18px] font-medium tracking-[-0.03em]">Run the example yourself</h2>
-        <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
+
+      <section className="mt-16 max-w-3xl" aria-labelledby="run-title">
+        <h2 id="run-title" className="font-serif text-[clamp(2rem,4vw,3rem)] leading-none tracking-[-0.04em]">
+          Run the example yourself.
+        </h2>
+        <p className="mt-4 text-[16px] leading-relaxed text-white/60">
           The public site will not attach an engine for you. From the published source:
         </p>
-        <pre className="mt-4 overflow-x-auto rounded-2xl bg-black/30 px-4 py-3 font-mono text-[13px] leading-relaxed text-foreground">
+        <pre className="mt-6 overflow-x-auto border border-white/15 bg-white/[0.03] px-5 py-4 font-mono text-[13px] leading-relaxed text-foreground">
           <code>{`scripts/local-engine.sh\ncd web && npm install && npm run dev`}</code>
         </pre>
-        <p className="mt-3 max-w-3xl text-[14px] leading-relaxed text-muted-foreground">
+        <p className="mt-4 text-[15px] leading-relaxed text-white/50">
           The engine listens on 127.0.0.1:43124. The site listens on 127.0.0.1:43123. Open
           /terminal there and the ticket turns on. The atoms are still examples. Nothing is sent
           to a chain.
         </p>
       </section>
-      <h2 className="mt-12 text-[18px] font-medium tracking-[-0.03em]">The pieces</h2>
-      <ol className="mt-4 grid gap-4">
-        {PIECES.map((piece, index) => (
-          <li key={piece.name} className="glass grid gap-3 rounded-[28px] px-6 py-5 sm:grid-cols-[4.5rem_minmax(0,1fr)]">
-            <p className="font-mono text-[13px] text-muted-foreground">{String(index + 1).padStart(2, "0")}</p>
-            <div>
-              <h3 className="text-[18px] font-medium tracking-[-0.03em]">{piece.name}</h3>
-              <p className="mt-1 text-[15px]">{piece.plain}</p>
-              <p className="mt-2 max-w-3xl text-[14px] leading-relaxed text-muted-foreground">{piece.detail}</p>
-            </div>
-          </li>
-        ))}
-      </ol>
-      <section className="glass mt-4 rounded-[28px] px-6 py-6">
-        <h2 className="text-[18px] font-medium tracking-[-0.03em]">The name</h2>
-        <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-muted-foreground">
+
+      <section className="mt-16" aria-labelledby="pieces-title">
+        <h2 id="pieces-title" className="font-serif text-[clamp(2rem,4vw,3rem)] leading-none tracking-[-0.04em]">
+          The pieces
+        </h2>
+        <ol className="mt-8 divide-y divide-white/10 border-y border-white/10">
+          {PIECES.map((piece, index) => (
+            <li key={piece.name} className="grid gap-3 py-8 sm:grid-cols-[6.5rem_minmax(0,1fr)] sm:gap-8">
+              <p className="font-mono text-[12px] text-white/35">{String(index + 1).padStart(2, "0")}</p>
+              <div>
+                <h3 className="font-serif text-[clamp(1.8rem,3vw,2.6rem)] leading-none tracking-[-0.04em]">
+                  {piece.name}
+                </h3>
+                <p className="mt-3 text-[16px]">{piece.plain}</p>
+                <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-white/55">{piece.detail}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section className="mt-16 max-w-2xl border-t border-white/10 pt-12" aria-labelledby="name-title">
+        <h2 id="name-title" className="font-serif text-[clamp(2rem,4vw,3rem)] leading-none tracking-[-0.04em]">
+          The name
+        </h2>
+        <p className="mt-5 text-[16px] leading-relaxed text-white/60">
           Two coffees and a beer at four in the morning is how Anatoly Yakovenko has described the
           idea behind Solana. It is not the origin of Percolator. The domain is a nod to that
           sentence. It is not an endorsement of this desk.
         </p>
-        <p className="mt-6">
-          <Link href="/terminal" className="glass-pill glass-solid text-[14px] font-medium">
-            Open terminal
+        <p className="mt-8">
+          <Link
+            href="/terminal"
+            className="text-[16px] text-foreground underline-offset-4 hover:underline focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+          >
+            Open the terminal
           </Link>
         </p>
       </section>
