@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Mark } from "@/components/mark";
-import { PERC_TOKEN_CA } from "@/lib/token";
 
 export function Enter({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(true);
@@ -88,9 +87,6 @@ export function Enter({ children }: { children: React.ReactNode }) {
               >
                 One market is one slab.
               </h1>
-              <p className="mt-5 max-w-xl font-mono text-[12px] leading-relaxed break-all text-white/55 sm:text-[13px]">
-                {PERC_TOKEN_CA}
-              </p>
               <button
                 ref={buttonRef}
                 type="button"

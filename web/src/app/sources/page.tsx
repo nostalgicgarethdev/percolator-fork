@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { PERC_TOKEN_CA } from "@/lib/token";
 
 export const metadata: Metadata = {
   title: "Sources — PERC",
@@ -89,12 +88,6 @@ export default function SourcesPage() {
         <p>
           Both upstream licenses are Apache-2.0. The program crate metadata does not repeat the
           license field; the license file itself is Apache-2.0.
-        </p>
-        <p>
-          The desk mint is{" "}
-          <span className="font-mono text-[12px] break-all text-foreground">{PERC_TOKEN_CA}</span>.
-          It is an initialized Token-2022 mint named Percolator. It is not the program id in this
-          tree and it is not a deposit address.
         </p>
       </div>
     </main>
