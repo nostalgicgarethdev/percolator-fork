@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Enter } from "@/components/enter";
 import { Mark } from "@/components/mark";
+import { TokenCaBar } from "@/components/token-ca";
 
 const TABS = [
   { href: "/", label: "Overview" },
@@ -65,6 +66,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               Read only
             </span>
           </div>
+          <TokenCaBar />
         </header>
         <div id="content">{children}</div>
         <footer className="border-t border-white/10">

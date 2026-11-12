@@ -10,6 +10,8 @@ PERC is an independent interface. The website and the local session are original
 
 A perpetual is a contract for a long or a short on a price, with no expiry. The public host does not attach an engine, take deposits, or place trades. A matcher and a keeper are not running.
 
+The desk mint is `8M8Lk4zuguvUMt5wmoQBdCauz8BHyvj1o7YDbagjpump`. It is an initialized Token-2022 mint named Percolatorv2, symbol Percolator, with 6 decimals. It is not the Percolator program, not a treasury, and not a deposit address.
+
 `MANIFEST.txt` records sanitized snapshot `666c4fa72aae30555b12b9451b33637e19baf636`. That snapshot id is not this repository's Git commit.
 
 The name is a nod. Anatoly Yakovenko has described a four-in-the-morning idea after two coffees and a beer. That story is about Solana, in a [Cointelegraph interview](https://cointelegraph.com/interview/solana-genesis-story-powering-nasdaq-on-public-blockchain). It is not the origin of the Percolator engine, and it is not an endorsement of PERC.
