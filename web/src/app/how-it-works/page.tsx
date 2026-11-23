@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FORK_LABEL, FORK_URL, TOLY_STEAL_IDEA } from "@/lib/links";
 
 export const metadata: Metadata = {
   title: "How it works — PERC",
   description:
-    "How the PERC website, the Percolator risk engine, the Solana wrapper, a matcher, and a keeper fit together.",
+    "How this read-only PERC desk, the Percolator risk engine, and the published fork fit together. No live trading on this host.",
 };
 
 const SESSION = [
@@ -68,16 +69,36 @@ export default function HowItWorksPage() {
           The website is the only piece that is on.
         </h1>
         <p className="mt-6 max-w-2xl text-[18px] leading-relaxed text-white/70">
-          PERC is the pages you are reading and the terminal. Under that sits Percolator, a risk
-          engine that allows or rejects a position. A Solana program would put that engine on a
-          chain. A matcher would agree a trade. A keeper would move the market forward. Those three
-          are not running.
+          PERC is the pages you are reading and the terminal. Under that sits Percolator, Anatoly
+          Yakovenko&apos;s open-source risk engine — the library he asked people to{" "}
+          <a
+            href={TOLY_STEAL_IDEA}
+            target="_blank"
+            rel="noreferrer"
+            className="text-foreground/90 underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+          >
+            steal
+          </a>{" "}
+          and use to build perps. A Solana program would put that engine on a chain. A matcher
+          would agree a trade. A keeper would move the market forward. Those three are not running
+          on this host.
         </p>
         <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-white/50">
           On a local machine the engine has been stepped through deposit, open, funding,
           settlement, close, withdraw, a few rejections, and one liquidation. Sixteen steps, on
           example numbers. That is not a public market.
         </p>
+        <p className="mt-8">
+          <a
+            href={FORK_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex h-12 items-center justify-center border border-white/35 px-6 text-[15px] text-white hover:bg-white hover:text-[#07060b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+          >
+            Open the fork
+          </a>
+        </p>
+        <p className="mt-3 font-mono text-[12px] text-white/40">{FORK_LABEL}</p>
       </header>
 
       <section className="mt-16" aria-labelledby="session-title">
@@ -108,7 +129,7 @@ export default function HowItWorksPage() {
           Run the example yourself.
         </h2>
         <p className="mt-4 text-[16px] leading-relaxed text-white/60">
-          The public site will not attach an engine for you. From the published source:
+          The public site will not attach an engine for you. From the published fork:
         </p>
         <pre className="mt-6 overflow-x-auto border border-white/15 bg-white/[0.03] px-5 py-4 font-mono text-[13px] leading-relaxed text-foreground">
           <code>{`scripts/local-engine.sh\ncd web && npm install && npm run dev`}</code>

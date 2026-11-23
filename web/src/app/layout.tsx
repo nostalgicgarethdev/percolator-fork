@@ -1,36 +1,48 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Instrument_Sans, Instrument_Serif } from "next/font/google";
+import localFont from "next/font/local";
 import { Shell } from "@/components/shell";
 import "./globals.css";
 
-const sans = Instrument_Sans({
+const sans = localFont({
+  src: "../fonts/InstrumentSans-variable.ttf",
   variable: "--font-barlow",
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: "400 600",
+  display: "swap",
 });
 
-const serif = Instrument_Serif({
+const serif = localFont({
+  src: "../fonts/InstrumentSerif-Regular.ttf",
   variable: "--font-newsreader",
-  subsets: ["latin"],
-  weight: ["400"],
+  weight: "400",
+  display: "swap",
 });
 
-const plex = IBM_Plex_Mono({
+const plex = localFont({
+  src: [
+    { path: "../fonts/IBMPlexMono-Regular.ttf", weight: "400", style: "normal" },
+    { path: "../fonts/IBMPlexMono-Medium.ttf", weight: "500", style: "normal" },
+  ],
   variable: "--font-plex",
-  subsets: ["latin"],
-  weight: ["400", "500"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.percolator.beer"),
-  title: "PERC — independent perpetuals desk",
+  title: "PERC — independent, read-only Percolator desk",
   description:
-    "An independent read of Percolator. One market is one slab of assets. Each asset keeps its own insurance. This host takes no deposit.",
+    "An independent read of Anatoly Yakovenko's open-source perps engine. This host does not take deposits or run live trading. The source is public.",
   openGraph: {
     title: "PERC",
     description:
-      "An independent read of Percolator. One market is one slab of assets. Each asset keeps its own insurance. This host takes no deposit.",
-    images: ["/brand/perc-square-1024.png"],
+      "An independent, read-only desk on Toly's open-source Percolator engine. No live trading on this host.",
+    images: ["/brand/perc-logo-1024.png"],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "PERC",
+    description:
+      "An independent, read-only desk on Toly's open-source Percolator engine. No live trading on this host.",
+    images: ["/brand/perc-logo-1024.png"],
   },
 };
 

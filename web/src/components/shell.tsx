@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Enter } from "@/components/enter";
 import { Mark } from "@/components/mark";
 import { TokenCaBar } from "@/components/token-ca";
+import { FORK_URL, X_URL } from "@/lib/links";
 
 const TABS = [
   { href: "/", label: "Overview" },
@@ -54,13 +55,20 @@ export function Shell({ children }: { children: React.ReactNode }) {
               })}
             </nav>
             <a
-              href="https://x.com/percolatorv2"
+              href={FORK_URL}
               target="_blank"
               rel="noreferrer"
-              className="shrink-0 text-[13px] text-white/45 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+              className="hidden shrink-0 text-[13px] text-white/70 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none sm:inline"
             >
-              <span className="sm:hidden">X</span>
-              <span className="hidden sm:inline">@percolatorv2</span>
+              Source
+            </a>
+            <a
+              href={X_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="hidden shrink-0 text-[13px] text-white/45 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none sm:inline"
+            >
+              @percolatorv2
             </a>
             <span className="hidden font-mono text-[11px] tracking-[0.14em] text-white/35 uppercase sm:inline">
               Read only
@@ -71,17 +79,28 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div id="content">{children}</div>
         <footer className="border-t border-white/10">
           <div className="mx-auto flex w-full max-w-6xl flex-col gap-3 px-5 py-8 sm:flex-row sm:items-baseline sm:justify-between sm:px-8">
-            <p className="max-w-md text-[13px] leading-relaxed text-white/45">
-              Example atoms. Independent, not the official engine. This host takes nothing.
+            <p className="max-w-lg text-[13px] leading-relaxed text-white/45">
+              Read-only public host. Independent of the official engine. No live trading, and this
+              host takes nothing.
             </p>
-            <a
-              href="https://x.com/percolatorv2"
-              target="_blank"
-              rel="noreferrer"
-              className="font-mono text-[12px] text-white/45 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
-            >
-              @percolatorv2
-            </a>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+              <a
+                href={FORK_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-[12px] text-white/45 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+              >
+                GitHub
+              </a>
+              <a
+                href={X_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="font-mono text-[12px] text-white/45 hover:text-foreground focus-visible:ring-2 focus-visible:ring-[#14F195] focus-visible:outline-none"
+              >
+                @percolatorv2
+              </a>
+            </div>
           </div>
         </footer>
       </Enter>
